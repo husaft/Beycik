@@ -1,4 +1,3 @@
-using Beycik.Draw.Fonts;
 using Beycik.Draw.Fonts.API;
 using Xunit;
 

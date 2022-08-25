@@ -22,4 +22,9 @@
     <ProjectReference Include="..\Beycik.Draw\Beycik.Draw.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\tux.*" />
+    <EmbeddedResource Include="Resources\tux.*" />
+  </ItemGroup>
+
 </Project>
