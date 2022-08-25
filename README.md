@@ -1,2 +1,8 @@
 # Beycik
-Beycik is a document generation tool
+Generate various document formats
+
+## Howto
+
+```console
+~$ ./build.sh
+```
