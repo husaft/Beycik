@@ -25,7 +25,7 @@ namespace Beycik.Model.Infos
         [XmlElement("SNAPSIZE")]
         public string SnapSizeStr
         {
-            get => SnapSize?.ToString("F6");
+            get => ValueEx.FormatDouble(SnapSize);
             set => SnapSize = ValueEx.ParseDouble(value);
         }
         

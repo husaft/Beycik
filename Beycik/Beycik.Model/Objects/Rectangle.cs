@@ -17,7 +17,7 @@ namespace Beycik.Model.Objects
         public string DrawTypeStr
         {
             get => ValueEx.FormatEnum(DrawType);
-            set => DrawType = Enum.Parse<DrawType>(value, true);
+            set => DrawType = ValueEx.ParseEnum<DrawType>(value);
         }
         
         [XmlIgnore]

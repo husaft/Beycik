@@ -1,4 +1,5 @@
 using System;
+using static System.Globalization.DateTimeStyles;
 
 namespace Beycik.Model.Tools
 {
@@ -6,7 +7,20 @@ namespace Beycik.Model.Tools
     {
         public static string FormatBool(bool? value)
         {
-            return value?.ToString();
+            string txt;
+            switch (value)
+            {
+                case true:
+                    txt = "yes";
+                    break;
+                case false:
+                    txt = "no";
+                    break;
+                default:
+                    return null;
+            }
+            txt = txt.ToLowerInvariant();
+            return txt;
         }
 
         public static bool? ParseBool(string value)
@@ -14,9 +28,12 @@ namespace Beycik.Model.Tools
             var txt = value?.ToLowerInvariant();
             switch (txt)
             {
-                case "yes": return true;
-                case "no": return false;
-                default: return null;
+                case "yes":
+                    return true;
+                case "no":
+                    return false;
+                default:
+                    return null;
             }
         }
 
@@ -58,5 +75,22 @@ namespace Beycik.Model.Tools
 
         public static char? ParseChar(string value)
             => char.TryParse(value, out var v) ? v : null;
+
+        public static string FormatDouble(double? value)
+            => value?.ToString("F6");
+
+        public static string FormatDate(DateTime date, string format)
+            => date.ToString(format);
+
+        public static string FormatDate(DateTime? date, string format)
+            => date?.ToString(format);
+
+        public static DateTime ParseDate(string value, string format)
+            => DateTime.ParseExact(value, format, null);
+
+        public static DateTime? TryParseDate(string value, string format)
+            => DateTime.TryParseExact(value, format, null, None, out var v)
+                ? v
+                : null;
     }
 }

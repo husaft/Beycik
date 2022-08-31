@@ -32,8 +32,8 @@ namespace Beycik.Model.Infos
         [XmlElement("FORMTIME")]
         public string FormTimeStr
         {
-            get => FormTime.ToString(StdDate);
-            set => FormTime = DateTime.ParseExact(value, StdDate, null);
+            get => ValueEx.FormatDate(FormTime, StdDate);
+            set => FormTime = ValueEx.ParseDate(value, StdDate);
         }
         
         [XmlElement("UID")]

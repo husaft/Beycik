@@ -19,11 +19,8 @@ namespace Beycik.Model.Roots
         [XmlAttribute("changeTime")]
         public string ChangeTimeStr
         {
-            get => ChangeTime?.ToString(DeDate);
-            set => ChangeTime = DateTime.TryParseExact(value, DeDate,
-                null, DateTimeStyles.None, out var v)
-                ? v
-                : null;
+            get => ValueEx.FormatDate(ChangeTime, DeDate);
+            set => ChangeTime = ValueEx.TryParseDate(value, DeDate);
         }
 
         [XmlIgnore] 
