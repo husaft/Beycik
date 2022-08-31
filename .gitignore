@@ -349,3 +349,8 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 .idea/
+
+# Test data
+Outputs/
+/Beycik/Beycik.Model.Tests/Resources/v3
+/Beycik/Beycik.Model.Tests/Resources/v4
