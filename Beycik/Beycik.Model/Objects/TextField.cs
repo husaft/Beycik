@@ -10,23 +10,44 @@ namespace Beycik.Model.Objects
     public sealed class TextField : AbstractText, IContent, INameable, 
         IValidateable, IColor, ITextItem 
     {
+        [XmlIgnore]
+        public byte? FontBlue { get; set; }
+        
         [XmlAttribute("fontblue")]
-        public byte FontBlue { get; set; }
+        public string FontBlueStr
+        {
+            get => ValueEx.FormatByte(FontBlue);
+            set => FontBlue = ValueEx.ParseByte(value);
+        }
+
+        [XmlIgnore]
+        public byte? FontGreen { get; set; }
 
         [XmlAttribute("fontgreen")]
-        public byte FontGreen { get; set; }
+        public string FontGreenStr
+        {
+            get => ValueEx.FormatByte(FontGreen);
+            set => FontGreen = ValueEx.ParseByte(value);
+        }
 
+        [XmlIgnore]
+        public byte? FontRed { get; set; }
+        
         [XmlAttribute("fontred")]
-        public byte FontRed { get; set; }
+        public string FontRedStr
+        {
+            get => ValueEx.FormatByte(FontRed);
+            set => FontRed = ValueEx.ParseByte(value);
+        }
         
         [XmlIgnore]
-        public Direction Align { get; set; }
+        public Direction? Align { get; set; }
         
         [XmlAttribute("align")]
         public string AlignStr
         {
             get => ValueEx.FormatEnum(Align);
-            set => Align = ValueEx.ParseEnum<Direction>(value);
+            set => Align = ValueEx.TryParseEnum<Direction>(value);
         }
 
         [XmlAttribute("maxlen")]
@@ -69,19 +90,47 @@ namespace Beycik.Model.Objects
             get => ValueEx.FormatFloat(LineSize);
             set => LineSize = ValueEx.ParseFloat(value);
         }
-
+        
+        [XmlIgnore]
+        public byte? FsBase { get; set; }
+        
         [XmlAttribute("fsbase")]
-        public byte FsBase { get; set; }
-
+        public string FsBaseStr
+        {
+            get => ValueEx.FormatByte(FsBase);
+            set => FsBase = ValueEx.ParseByte(value);
+        }
+        
+        [XmlIgnore]
+        public byte? FsMin { get; set; }
+        
         [XmlAttribute("fsmin")]
-        public byte FsMin { get; set; }
-
+        public string FsMinStr
+        {
+            get => ValueEx.FormatByte(FsMin);
+            set => FsMin = ValueEx.ParseByte(value);
+        }
+        
+        [XmlIgnore]
+        public short? Group { get; set; }
+        
         [XmlAttribute("group")]
-        public short Group { get; set; }
-
+        public string GroupStr
+        {
+            get => ValueEx.FormatShort(Group);
+            set => Group = ValueEx.ParseShort(value);
+        }
+        
+        [XmlIgnore]
+        public byte? HtmlHidden { get; set; }
+        
         [XmlAttribute("htmlhidden")]
-        public byte HtmlHidden { get; set; }
-
+        public string HtmlHiddenStr
+        {
+            get => ValueEx.FormatByte(HtmlHidden);
+            set => HtmlHidden = ValueEx.ParseByte(value);
+        }
+        
         [XmlText]
         public string Content { get; set; }
     }

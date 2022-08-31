@@ -29,27 +29,55 @@ namespace Beycik.Model.Objects
             get => ValueEx.FormatFloat(LineSize);
             set => LineSize = ValueEx.ParseFloat(value);
         }
-
-        [XmlAttribute("blue")]
-        public byte Blue { get; set; }
-
-        [XmlAttribute("transparent")]
-        public byte Transparent { get; set; }
-
-        [XmlAttribute("green")]
-        public byte Green { get; set; }
-
-        [XmlAttribute("red")]
-        public byte Red { get; set; }
         
         [XmlIgnore]
-        public Shape Shape { get; set; }
+        public byte? Blue { get; set; }
+        
+        [XmlAttribute("blue")]
+        public string BlueStr
+        {
+            get => ValueEx.FormatByte(Blue);
+            set => Blue = ValueEx.ParseByte(value);
+        }
+
+        [XmlIgnore]
+        public byte? Green { get; set; }
+
+        [XmlAttribute("green")]
+        public string GreenStr
+        {
+            get => ValueEx.FormatByte(Green);
+            set => Green = ValueEx.ParseByte(value);
+        }
+
+        [XmlIgnore]
+        public byte? Red { get; set; }
+        
+        [XmlAttribute("red")]
+        public string RedStr
+        {
+            get => ValueEx.FormatByte(Red);
+            set => Red = ValueEx.ParseByte(value);
+        }
+
+        [XmlIgnore]
+        public byte? Transparent { get; set; }
+        
+        [XmlAttribute("transparent")]
+        public string TransparentStr
+        {
+            get => ValueEx.FormatByte(Transparent);
+            set => Transparent = ValueEx.ParseByte(value);
+        }
+        
+        [XmlIgnore]
+        public Shape? Shape { get; set; }
 
         [XmlAttribute("shape")]
         public string ShapeStr
         {
             get => ValueEx.FormatEnum(Shape);
-            set => Shape = ValueEx.ParseEnum<Shape>(value);
+            set => Shape = ValueEx.TryParseEnum<Shape>(value);
         }
         
         [XmlIgnore]

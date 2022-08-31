@@ -39,8 +39,15 @@ namespace Beycik.Model.Objects
 
         [XmlAttribute("decodedlength")]
         public int DecodedLength { get; set; }
-
-        [XmlText]
+        
+        [XmlIgnore]
         public byte[] Encoded { get; set; }
+        
+        [XmlText]
+        public string EncodedStr
+        {
+            get => ValueEx.FormatBytes(Encoded);
+            set => Encoded = ValueEx.ParseBytes(value);
+        }
     }
 }

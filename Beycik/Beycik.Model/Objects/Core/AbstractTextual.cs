@@ -8,13 +8,13 @@ namespace Beycik.Model.Objects.Core
     public abstract class AbstractTextual : AbstractText, IFontColor, ISized
     {
         [XmlIgnore]
-        public Direction Align { get; set; }
+        public Direction? Align { get; set; }
         
         [XmlAttribute("align")]
         public string AlignStr
         {
             get => ValueEx.FormatEnum(Align);
-            set => Align = ValueEx.ParseEnum<Direction>(value);
+            set => Align = ValueEx.TryParseEnum<Direction>(value);
         }
         
         [XmlIgnore]
@@ -27,16 +27,44 @@ namespace Beycik.Model.Objects.Core
             set => LineHeight = ValueEx.ParseFloat(value);
         }
         
+        [XmlIgnore]
+        public byte? Angle { get; set; }
+        
         [XmlAttribute("angle")]
-        public byte Angle { get; set; }
-
+        public string AngleStr
+        {
+            get => ValueEx.FormatByte(Angle);
+            set => Angle = ValueEx.ParseByte(value);
+        }
+        
+        [XmlIgnore]
+        public byte? FontBlue { get; set; }
+        
         [XmlAttribute("fontblue")]
-        public byte FontBlue { get; set; }
+        public string FontBlueStr
+        {
+            get => ValueEx.FormatByte(FontBlue);
+            set => FontBlue = ValueEx.ParseByte(value);
+        }
+
+        [XmlIgnore]
+        public byte? FontGreen { get; set; }
 
         [XmlAttribute("fontgreen")]
-        public byte FontGreen { get; set; }
+        public string FontGreenStr
+        {
+            get => ValueEx.FormatByte(FontGreen);
+            set => FontGreen = ValueEx.ParseByte(value);
+        }
 
+        [XmlIgnore]
+        public byte? FontRed { get; set; }
+        
         [XmlAttribute("fontred")]
-        public byte FontRed { get; set; }
+        public string FontRedStr
+        {
+            get => ValueEx.FormatByte(FontRed);
+            set => FontRed = ValueEx.ParseByte(value);
+        }
     }
 }

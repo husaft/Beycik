@@ -53,13 +53,34 @@ namespace Beycik.Model.Objects.Scraps
             set => Underline = ValueEx.ParseBool(value);
         }
         
-        [XmlAttribute("fontred")]
-        public byte FontRed { get; set; }
+        [XmlIgnore]
+        public byte? FontBlue { get; set; }
+        
+        [XmlAttribute("fontblue")]
+        public string FontBlueStr
+        {
+            get => ValueEx.FormatByte(FontBlue);
+            set => FontBlue = ValueEx.ParseByte(value);
+        }
+
+        [XmlIgnore]
+        public byte? FontGreen { get; set; }
 
         [XmlAttribute("fontgreen")]
-        public byte FontGreen { get; set; }
+        public string FontGreenStr
+        {
+            get => ValueEx.FormatByte(FontGreen);
+            set => FontGreen = ValueEx.ParseByte(value);
+        }
 
-        [XmlAttribute("fontblue")]
-        public byte FontBlue { get; set; }
+        [XmlIgnore]
+        public byte? FontRed { get; set; }
+        
+        [XmlAttribute("fontred")]
+        public string FontRedStr
+        {
+            get => ValueEx.FormatByte(FontRed);
+            set => FontRed = ValueEx.ParseByte(value);
+        }
     }
 }

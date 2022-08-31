@@ -30,8 +30,15 @@ namespace Beycik.Model.Objects
             set => Editable = ValueEx.ParseBool(value);
         }
 
+        [XmlIgnore]
+        public byte? Group { get; set; }
+
         [XmlAttribute("group")]
-        public byte Group { get; set; }
+        public string GroupStr
+        {
+            get => ValueEx.FormatByte(Group);
+            set => Group = ValueEx.ParseByte(value);
+        }
 
         [XmlElement("VALUE")]
         public string Value { get; set; }

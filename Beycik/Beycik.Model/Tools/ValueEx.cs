@@ -1,4 +1,5 @@
 using System;
+using Beycik.Model.Objects.Scraps;
 using static System.Globalization.DateTimeStyles;
 
 namespace Beycik.Model.Tools
@@ -37,8 +38,13 @@ namespace Beycik.Model.Tools
             }
         }
 
-        public static string FormatFloat(float? value)
-            => value?.ToString("F2");
+        public static string FormatFloat(float? value, bool removeZero = false)
+        {
+            var text = value?.ToString("F2");
+            if (removeZero)
+                text = text?.Replace(".00", string.Empty);
+            return text;
+        }
 
         public static float? ParseFloat(string value)
             => float.TryParse(value, out var v) ? v : null;
@@ -50,11 +56,23 @@ namespace Beycik.Model.Tools
             => byte.TryParse(value, out var v) ? v : null;
 
         public static string FormatEnum<T>(T value) where T : struct
-            => value.ToString();
+        {
+            var txt = value.ToString();
+            return txt?.ToLowerInvariant();
+        }
 
+        public static string FormatEnum<T>(T? value) where T : struct
+        {
+            var txt = value?.ToString();
+            return txt?.ToLowerInvariant();
+        }
+        
         public static T ParseEnum<T>(string value) where T : struct
             => Enum.Parse<T>(value, ignoreCase: true);
 
+        public static T? TryParseEnum<T>(string value) where T : struct
+            => Enum.TryParse<T>(value, ignoreCase: true, out var v) ? v : null;
+        
         public static string FormatByte(byte? value)
             => value?.ToString();
 
@@ -92,5 +110,17 @@ namespace Beycik.Model.Tools
             => DateTime.TryParseExact(value, format, null, None, out var v)
                 ? v
                 : null;
+
+        public static string FormatBytes(byte[] value) 
+            => Convert.ToBase64String(value, Base64FormattingOptions.InsertLineBreaks);
+
+        public static byte[] ParseBytes(string value) 
+            => Convert.FromBase64String(value);
+
+        public static short? ParseShort(string value) 
+            => short.TryParse(value, out var v) ? v : null;
+
+        public static string FormatShort(short? value) 
+            => value?.ToString();
     }
 }

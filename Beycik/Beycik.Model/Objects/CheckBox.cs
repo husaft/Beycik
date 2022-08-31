@@ -1,6 +1,7 @@
 using System.Xml.Serialization;
 using Beycik.Model.API;
 using Beycik.Model.Objects.Core;
+using Beycik.Model.Objects.Scraps;
 using Beycik.Model.Tools;
 
 namespace Beycik.Model.Objects
@@ -9,11 +10,25 @@ namespace Beycik.Model.Objects
     public sealed class CheckBox : AbstractBox, IContent, IColor, 
         INameable, ITextItem, IValidateable
     {
+        [XmlIgnore]
+        public short? GroupExclusive { get; set; }
+        
         [XmlAttribute("group_exclusive")]
-        public short GroupExclusive { get; set; }
-
+        public string GroupExclusiveStr
+        {
+            get => ValueEx.FormatShort(GroupExclusive);
+            set => GroupExclusive = ValueEx.ParseShort(value);
+        }
+        
+        [XmlIgnore]
+        public short? Group { get; set; }
+        
         [XmlAttribute("group")]
-        public short Group { get; set; }
+        public string GroupStr
+        {
+            get => ValueEx.FormatShort(Group);
+            set => Group = ValueEx.ParseShort(value);
+        }
         
         [XmlIgnore]
         public bool? Radio { get; set; }
@@ -25,23 +40,65 @@ namespace Beycik.Model.Objects
             set => Radio = ValueEx.ParseBool(value);
         }
         
-        [XmlAttribute("shape")]
-        public byte Shape { get; set; }
+        [XmlIgnore]
+        public Shape? Shape { get; set; }
 
+        [XmlAttribute("shape")]
+        public string ShapeStr
+        {
+            get => ValueEx.FormatEnum(Shape);
+            set => Shape = ValueEx.TryParseEnum<Shape>(value);
+        }
+        
+        [XmlIgnore]
+        public byte? Blue { get; set; }
+        
         [XmlAttribute("blue")]
-        public byte Blue { get; set; }
+        public string BlueStr
+        {
+            get => ValueEx.FormatByte(Blue);
+            set => Blue = ValueEx.ParseByte(value);
+        }
+
+        [XmlIgnore]
+        public byte? Green { get; set; }
 
         [XmlAttribute("green")]
-        public byte Green { get; set; }
+        public string GreenStr
+        {
+            get => ValueEx.FormatByte(Green);
+            set => Green = ValueEx.ParseByte(value);
+        }
 
+        [XmlIgnore]
+        public byte? Red { get; set; }
+        
         [XmlAttribute("red")]
-        public byte Red { get; set; }
+        public string RedStr
+        {
+            get => ValueEx.FormatByte(Red);
+            set => Red = ValueEx.ParseByte(value);
+        }
 
+        [XmlIgnore]
+        public byte? Transparent { get; set; }
+        
         [XmlAttribute("transparent")]
-        public byte Transparent { get; set; }
+        public string TransparentStr
+        {
+            get => ValueEx.FormatByte(Transparent);
+            set => Transparent = ValueEx.ParseByte(value);
+        }
+        
+        [XmlIgnore]
+        public byte? HtmlDisabled { get; set; }
         
         [XmlAttribute("htmldisabled")]
-        public byte HtmlDisabled { get; set; }
+        public string HtmlDisabledStr
+        {
+            get => ValueEx.FormatByte(HtmlDisabled);
+            set => HtmlDisabled = ValueEx.ParseByte(value);
+        }
         
         [XmlIgnore]
         public bool? PrintBorder { get; set; }
@@ -72,8 +129,15 @@ namespace Beycik.Model.Objects
         [XmlAttribute("fsdeletelabel")]
         public string FsDeleteLabel { get; set; }
         
+        [XmlIgnore]
+        public byte? FsLast { get; set; }
+        
         [XmlAttribute("fslast")]
-        public byte FsLast { get; set; }
+        public string FsLastStr
+        {
+            get => ValueEx.FormatByte(FsLast);
+            set => FsLast = ValueEx.ParseByte(value);
+        }
         
         [XmlAttribute("valparam1")]
         public string ValParam1 { get; set; }

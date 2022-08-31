@@ -21,7 +21,7 @@ namespace Beycik.Model.Infos
         public string FormUid { get; set; }
         
         [XmlElement("CURLAYOUTHC")]
-        public byte[] CurLayoutHc { get; set; }
+        public string CurLayoutHc { get; set; }
         
         [XmlElement("FORMVERSION")]
         public byte FormVersion { get; set; }

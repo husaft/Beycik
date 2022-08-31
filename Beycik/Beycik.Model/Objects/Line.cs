@@ -38,16 +38,44 @@ namespace Beycik.Model.Objects
             set => LineSize = ValueEx.ParseFloat(value);
         }
         
+        [XmlIgnore]
+        public byte? Blue { get; set; }
+        
         [XmlAttribute("blue")]
-        public byte Blue { get; set; }
+        public string BlueStr
+        {
+            get => ValueEx.FormatByte(Blue);
+            set => Blue = ValueEx.ParseByte(value);
+        }
+
+        [XmlIgnore]
+        public byte? Green { get; set; }
 
         [XmlAttribute("green")]
-        public byte Green { get; set; }
+        public string GreenStr
+        {
+            get => ValueEx.FormatByte(Green);
+            set => Green = ValueEx.ParseByte(value);
+        }
 
+        [XmlIgnore]
+        public byte? Red { get; set; }
+        
         [XmlAttribute("red")]
-        public byte Red { get; set; }
+        public string RedStr
+        {
+            get => ValueEx.FormatByte(Red);
+            set => Red = ValueEx.ParseByte(value);
+        }
 
+        [XmlIgnore]
+        public byte? Transparent { get; set; }
+        
         [XmlAttribute("transparent")]
-        public byte Transparent { get; set; }
+        public string TransparentStr
+        {
+            get => ValueEx.FormatByte(Transparent);
+            set => Transparent = ValueEx.ParseByte(value);
+        }
     }
 }

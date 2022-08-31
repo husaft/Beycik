@@ -36,7 +36,7 @@ namespace Beycik.Model.Objects.Core
         [XmlAttribute("fontsize")]
         public string FontSizeStr
         {
-            get => ValueEx.FormatFloat(FontSize);
+            get => ValueEx.FormatFloat(FontSize, true);
             set => FontSize = ValueEx.ParseFloat(value);
         }
 
@@ -94,22 +94,57 @@ namespace Beycik.Model.Objects.Core
             get => ValueEx.FormatFloat(UlEnd);
             set => UlEnd = ValueEx.ParseFloat(value);
         }
-
+        
+        [XmlIgnore]
+        public byte? UlStart { get; set; }
+        
         [XmlAttribute("ulstart")]
-        public byte UlStart { get; set; }
+        public string UlStartStr
+        {
+            get => ValueEx.FormatByte(UlStart);
+            set => UlStart = ValueEx.ParseByte(value);
+        }
+        
+        [XmlIgnore]
+        public byte? Blue { get; set; }
+        
+        [XmlAttribute("blue")]
+        public string BlueStr
+        {
+            get => ValueEx.FormatByte(Blue);
+            set => Blue = ValueEx.ParseByte(value);
+        }
 
-        [XmlAttribute("red")]
-        public byte Red { get; set; }
+        [XmlIgnore]
+        public byte? Green { get; set; }
 
         [XmlAttribute("green")]
-        public byte Green { get; set; }
+        public string GreenStr
+        {
+            get => ValueEx.FormatByte(Green);
+            set => Green = ValueEx.ParseByte(value);
+        }
 
-        [XmlAttribute("blue")]
-        public byte Blue { get; set; }
+        [XmlIgnore]
+        public byte? Red { get; set; }
+        
+        [XmlAttribute("red")]
+        public string RedStr
+        {
+            get => ValueEx.FormatByte(Red);
+            set => Red = ValueEx.ParseByte(value);
+        }
 
+        [XmlIgnore]
+        public byte? Transparent { get; set; }
+        
         [XmlAttribute("transparent")]
-        public byte Transparent { get; set; }
-
+        public string TransparentStr
+        {
+            get => ValueEx.FormatByte(Transparent);
+            set => Transparent = ValueEx.ParseByte(value);
+        }
+        
         [XmlAttribute("fsdeletelabel")]
         public string FsDeleteLabel { get; set; }
 
@@ -118,8 +153,15 @@ namespace Beycik.Model.Objects.Core
 
         [XmlAttribute("fsnext")]
         public string FsNext { get; set; }
-
+        
+        [XmlIgnore]
+        public byte? FsLast { get; set; }
+        
         [XmlAttribute("fslast")]
-        public byte FsLast { get; set; }
+        public string FsLastStr
+        {
+            get => ValueEx.FormatByte(FsLast);
+            set => FsLast = ValueEx.ParseByte(value);
+        }
     }
 }

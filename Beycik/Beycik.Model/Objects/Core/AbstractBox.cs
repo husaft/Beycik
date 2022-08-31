@@ -82,13 +82,27 @@ namespace Beycik.Model.Objects.Core
             set => FsEnd = ValueEx.ParseFloat(value);
         }
         
+        [XmlIgnore] 
+        public byte? FsStart { get; set; }
+        
         [XmlAttribute("fsstart")] 
-        public byte FsStart { get; set; }
+        public string FsStartStr
+        {
+            get => ValueEx.FormatByte(FsStart);
+            set => FsStart = ValueEx.ParseByte(value);
+        }
 
         [XmlAttribute("fslegend")] 
         public string FsLegend { get; set; }
 
+        [XmlIgnore] 
+        public byte? FsHidden { get; set; }
+        
         [XmlAttribute("fshidden")] 
-        public byte FsHidden { get; set; }
+        public string FsHiddenStr
+        {
+            get => ValueEx.FormatByte(FsHidden);
+            set => FsHidden = ValueEx.ParseByte(value);
+        }
     }
 }
