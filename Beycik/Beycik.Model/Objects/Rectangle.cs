@@ -1,4 +1,3 @@
-using System;
 using System.Xml.Serialization;
 using Beycik.Model.API;
 using Beycik.Model.Objects.Core;
@@ -11,13 +10,13 @@ namespace Beycik.Model.Objects
     public sealed class Rectangle : AbstractBox, IIdentifiable, IColor, ISized
     {
         [XmlIgnore]
-        public DrawType DrawType { get; set; }
+        public DrawType? DrawType { get; set; }
 
         [XmlAttribute("drawtype")]
         public string DrawTypeStr
         {
             get => ValueEx.FormatEnum(DrawType);
-            set => DrawType = ValueEx.ParseEnum<DrawType>(value);
+            set => DrawType = ValueEx.TryParseEnum<DrawType>(value);
         }
         
         [XmlIgnore]

@@ -7,6 +7,6 @@ namespace Beycik.Model.Infos
     public class Tags
     {
         [XmlElement("TAG")]
-        public List<string> Items { get; set; }
+        public List<string> Tag { get; set; }
     }
 }

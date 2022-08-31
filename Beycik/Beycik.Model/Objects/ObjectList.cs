@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using Beycik.Model.Objects.Core;
 using Beycik.Model.Tools;
@@ -183,5 +184,14 @@ namespace Beycik.Model.Objects
         [XmlElement("CONTAINER", typeof(Container))]
         [XmlElement("BUTTON", typeof(Button))]
         public List<ObjectNode> Items { get; set; }
+        
+        [XmlIgnore] public IEnumerable<CheckBox> CheckBoxes => Items.OfType<CheckBox>();
+        [XmlIgnore] public IEnumerable<Frame> Frames => Items.OfType<Frame>();
+        [XmlIgnore] public IEnumerable<Line> Lines => Items.OfType<Line>();
+        [XmlIgnore] public IEnumerable<Rectangle> Rectangles => Items.OfType<Rectangle>();
+        [XmlIgnore] public IEnumerable<Text> Texts => Items.OfType<Text>();
+        [XmlIgnore] public IEnumerable<TextArea> TextAreas => Items.OfType<TextArea>();
+        [XmlIgnore] public IEnumerable<TextCluster> TextClusters => Items.OfType<TextCluster>();
+        [XmlIgnore] public IEnumerable<TextField> TextFields => Items.OfType<TextField>();
     }
 }

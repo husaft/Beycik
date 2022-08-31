@@ -9,4 +9,9 @@
     <ProjectReference Include="..\Beycik.Model\Beycik.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="JsonDiffPatch.Net" Version="2.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
 </Project>

@@ -1,8 +1,8 @@
-using Xunit;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Xunit;
 using static Beycik.Model.Tests.TestHelper;
 
 namespace Beycik.Model.Tests
