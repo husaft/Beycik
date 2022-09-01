@@ -133,7 +133,7 @@ namespace Beycik.Model.Bulk
                                 case JTokenType.String:
                                     var strTxt = jv.Value?.ToString()?
                                         .Replace("\r\n", "\n");
-                                    if (string.IsNullOrEmpty(strTxt))
+                                    if (string.IsNullOrWhiteSpace(strTxt))
                                         continue;
                                     propVal = strTxt;
                                     if (strTxt!.EndsWith(".0"))
