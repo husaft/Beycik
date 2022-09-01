@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -113,17 +114,19 @@ namespace Beycik.Model.Bulk
                         }
                         if (propVal is JArray jaa)
                         {
-                            const string contKey = "Content";
-                            var fixes = jaa.Select((p, idx) => (p as JObject)?.Count
-                                switch
-                                {
-                                    0 => (idx, string.Empty),
-                                    1 when ((JObject)p).ContainsKey(contKey) => (idx, p[contKey]),
-                                    _ => (-1, null)
-                                }).ToArray();
-                            foreach (var (i, content) in fixes)
+                            foreach (var (i, content) in AsString(jaa))
                                 if (i >= 0)
                                     jaa[i] = content;
+                        }
+                        if (propVal is JObject { Count: 1 } jo)
+                        {
+                            var fakeArr = AsString(new JArray(jo));
+                            if (fakeArr[0].idx >= 0)
+                            {
+                                propVal = fakeArr[0].tok;
+                                if (propName.Equals("OPTION"))
+                                    propName = "@item";
+                            }
                         }
                         if (propVal is JValue jv)
                             switch (jv.Type)
@@ -152,6 +155,18 @@ namespace Beycik.Model.Bulk
                 }
             }
             return obj.ToString(format);
+        }
+
+        private static (int idx, JToken tok)[] AsString(JContainer con)
+        {
+            const string contKey = "Content";
+            return con.Select((p, idx) => (p as JObject)?.Count
+                switch
+                {
+                    0 => (idx, string.Empty),
+                    1 when ((JObject)p).ContainsKey(contKey) => (idx, p[contKey]),
+                    _ => (-1, null)
+                }).ToArray();
         }
 
         private static string PatchName(string name, JToken value)
