@@ -144,8 +144,10 @@ namespace Beycik.Model.Bulk
                                     if (string.IsNullOrWhiteSpace(strTxt))
                                         continue;
                                     propVal = strTxt;
-                                    if (strTxt!.EndsWith(".0"))
-                                        propVal = $"{strTxt}0";
+                                    if (strTxt!.EndsWith(".00"))
+                                        propVal = strTxt[..^3];
+                                    else if (strTxt!.EndsWith(".0"))
+                                        propVal = strTxt[..^2];
                                     break;
                             }
                         if (propName.StartsWith("#"))
