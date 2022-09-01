@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using Beycik.Model.Tools;
 
 namespace Beycik.Model.Roots
 {
@@ -7,8 +8,15 @@ namespace Beycik.Model.Roots
     {
         [XmlAttribute("decodedlength")]
         public short DecodedLength { get; set; }
-
-        [XmlText]
+        
+        [XmlIgnore]
         public byte[] Encoded { get; set; }
+        
+        [XmlText]
+        public string EncodedStr
+        {
+            get => ValueEx.FormatBytes(Encoded);
+            set => Encoded = ValueEx.ParseBytes(value);
+        }
     }
 }

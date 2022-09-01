@@ -5,5 +5,7 @@ namespace Beycik.Model.Tools
         public const string StdDate = "yyyy-MM-dd HH:mm:ss.f";
         
         public const string DeDate = "dd.MM.yyyy HH:mm";
+        
+        public const string DeDateS = "dd.MM.yyyy HH:mm:ss";
     }
 }

@@ -18,8 +18,10 @@ namespace Beycik.Model.Roots
         [XmlAttribute("changeTime")]
         public string ChangeTimeStr
         {
-            get => ValueEx.FormatDate(ChangeTime, DeDate);
-            set => ChangeTime = ValueEx.TryParseDate(value, DeDate);
+            get => ValueEx.FormatDate(ChangeTime,
+                ChangeTime.GetValueOrDefault().Second >= 1 ? DeDateS : DeDate);
+            set => ChangeTime = ValueEx.TryParseDate(value, DeDateS) ??
+                                ValueEx.TryParseDate(value, DeDate);
         }
 
         [XmlIgnore] 

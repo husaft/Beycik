@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks.Dataflow;
 using System.Xml;
+using Beycik.Model.Objects;
 using Beycik.Model.Roots;
 using JsonDiffPatchDotNet;
 using Newtonsoft.Json;
@@ -111,15 +113,17 @@ namespace Beycik.Model.Bulk
                         }
                         if (propVal is JArray jaa)
                         {
-                            var small = jaa.OfType<JObject>().Where(p => p.Count <= 1).ToArray();
-                            if (small.Length == jaa.Count)
-                                for (var i = 0; i < jaa.Count; i++)
+                            const string contKey = "Content";
+                            var fixes = jaa.Select((p, idx) => (p as JObject)?.Count
+                                switch
                                 {
-                                    var elem = (JObject) jaa[i];
-                                    elem.TryGetValue("Content", out var ct);
-                                    var content = (ct as JValue)?.Value.ToString() ?? string.Empty;
+                                    0 => (idx, string.Empty),
+                                    1 when ((JObject)p).ContainsKey(contKey) => (idx, p[contKey]),
+                                    _ => (-1, null)
+                                }).ToArray();
+                            foreach (var (i, content) in fixes)
+                                if (i >= 0)
                                     jaa[i] = content;
-                                }
                         }
                         if (propVal is JValue jv)
                             switch (jv.Type)
