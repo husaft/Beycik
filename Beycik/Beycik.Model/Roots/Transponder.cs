@@ -19,8 +19,8 @@ namespace Beycik.Model.Roots
         [XmlElement("PROTOCOL")]
         public string ProtocolStr
         {
-            get => ValueEx.FormatEnum(Protocol, true);
-            set => Protocol = ValueEx.ParseEnum<Protocol>(value);
+            get => ValueEx.FormatMyEnum(Protocol);
+            set => Protocol = ValueEx.ParseMyEnum<Protocol>(value);
         }
         
         [XmlElement("OSCI")]

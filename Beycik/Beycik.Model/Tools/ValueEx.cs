@@ -59,6 +59,12 @@ namespace Beycik.Model.Tools
             var txt = value.ToString();
             return upper ? txt?.ToUpperInvariant() : txt?.ToLowerInvariant();
         }
+        
+        public static string FormatMyEnum<T>(T value) where T : struct
+        {
+            var txt = value.ToString();
+            return txt;
+        }
 
         public static string FormatEnum<T>(T? value, bool upper = false) where T : struct
         {
@@ -69,6 +75,9 @@ namespace Beycik.Model.Tools
         public static T ParseEnum<T>(string value) where T : struct
             => Enum.Parse<T>(value, ignoreCase: true);
 
+        public static T ParseMyEnum<T>(string value) where T : struct
+            => Enum.Parse<T>(value, ignoreCase: false);
+        
         public static T? TryParseEnum<T>(string value) where T : struct
             => Enum.TryParse<T>(value, ignoreCase: true, out var v) ? v : null;
         
