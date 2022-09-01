@@ -139,7 +139,8 @@ namespace Beycik.Model.Bulk
                                     break;
                                 case JTokenType.String:
                                     var strTxt = jv.Value?.ToString()?
-                                        .Replace("\r\n", "\n");
+                                        .Replace("\r\n", "\n")
+                                        .Trim();
                                     if (string.IsNullOrWhiteSpace(strTxt))
                                         continue;
                                     propVal = strTxt;
