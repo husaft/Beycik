@@ -31,6 +31,7 @@ namespace Beycik.Model.Bulk
 
             var errors = new List<string>();
             XmlHelper.Errors = errors;
+            DiffTools.CleanUp(outFolder);
 
             var num = 0;
             foreach (var file in files)
@@ -43,7 +44,8 @@ namespace Beycik.Model.Bulk
                 var size = doc?.Objects.Items.Count ?? -1;
                 Console.WriteLine($" --> {size} objects found");
 
-                DiffTools.CheckAsJson(file, doc, outFolder);
+                if (!DiffTools.CheckAsJson(file, doc, outFolder))
+                    errors.Add("One or more differences in model!");
 
                 if (!errors.Any())
                     continue;

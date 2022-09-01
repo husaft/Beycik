@@ -24,7 +24,7 @@ namespace Beycik.Model.Objects
         [XmlAttribute("sizetype")]
         public string SizeTypeStr
         {
-            get => ValueEx.FormatEnum(SizeType);
+            get => ValueEx.FormatEnum(SizeType, false);
             set => SizeType = ValueEx.ParseEnum<SizeType>(value);
         }
         

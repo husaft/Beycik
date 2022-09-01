@@ -76,6 +76,8 @@ namespace Beycik.Model.Bulk
                             continue;
                         if (propName.Equals("Items"))
                             continue;
+                        if (propName.Equals("Encoded"))
+                            continue;
 
                         if (propName.EndsWith(suffix))
                             propName = propName[..^suffix.Length];
@@ -84,6 +86,11 @@ namespace Beycik.Model.Bulk
                             : propName.StartsWith('#')
                                 ? propName
                                 : $"@{propName.ToLowerInvariant().TrimStart('@').Replace("_", "")}";
+
+                        if (propName.Equals("@tag"))
+                            propName = "TAG";
+                        if (propName.Equals("@options"))
+                            propName = "@items";
 
                         if (prop.Value is JObject { HasValues: false })
                             continue;
@@ -95,8 +102,24 @@ namespace Beycik.Model.Bulk
                         {
                             if (((ja[0] as JValue)?.Value as string)?.Length == 0)
                                 continue;
-                            propName = prop.Name.ToUpperInvariant().TrimEnd('S');
+                            propName = prop.Name.ToUpperInvariant();
+                            if (propName.EndsWith("XES"))
+                                propName = propName.TrimEnd('S').TrimEnd('E');
+                            else
+                                propName = propName.TrimEnd('S');
                             propVal = ja[0];
+                        }
+                        if (propVal is JArray jaa)
+                        {
+                            var small = jaa.OfType<JObject>().Where(p => p.Count <= 1).ToArray();
+                            if (small.Length == jaa.Count)
+                                for (var i = 0; i < jaa.Count; i++)
+                                {
+                                    var elem = (JObject) jaa[i];
+                                    elem.TryGetValue("Content", out var ct);
+                                    var content = (ct as JValue)?.Value.ToString() ?? string.Empty;
+                                    jaa[i] = content;
+                                }
                         }
                         if (propVal is JValue jv)
                             switch (jv.Type)
@@ -110,6 +133,8 @@ namespace Beycik.Model.Bulk
                                 case JTokenType.String:
                                     var strTxt = jv.Value?.ToString()?
                                         .Replace("\r\n", "\n");
+                                    if (string.IsNullOrEmpty(strTxt))
+                                        continue;
                                     propVal = strTxt;
                                     if (strTxt!.EndsWith(".0"))
                                         propVal = $"{strTxt}0";
@@ -135,10 +160,10 @@ namespace Beycik.Model.Bulk
                 else
                     name += "s";
             }
-            return name.Equals("Content") ? "#text" : name;
+            return name.Equals("Content") || name.Equals("EncodedStr") ? "#text" : name;
         }
 
-        public static void CheckAsJson(string file, XmlDoc doc, string folder)
+        public static bool CheckAsJson(string file, XmlDoc doc, string folder)
         {
             var baseName = Path.GetFileNameWithoutExtension(file);
             var srcXml = PatchNames(ToJson(LoadXml(file)));
@@ -146,15 +171,22 @@ namespace Beycik.Model.Bulk
 
             var diff = Compare(srcXml, srcMem);
             var diffJsonFile = Path.Combine(folder, $"{baseName}.diff.json");
-            if (string.IsNullOrWhiteSpace(diff)) 
-                return;
-            
+            if (string.IsNullOrWhiteSpace(diff))
+                return true;
+
             Console.WriteLine($" --> {diffJsonFile}");
             var inJsonFile = Path.Combine(folder, $"{baseName}.in.json");
             var outJsonFile = Path.Combine(folder, $"{baseName}.out.json");
             File.WriteAllText(inJsonFile, srcXml, Encoding.UTF8);
             File.WriteAllText(outJsonFile, srcMem, Encoding.UTF8);
             File.WriteAllText(diffJsonFile, diff, Encoding.UTF8);
+            return false;
+        }
+
+        public static void CleanUp(string folder)
+        {
+            foreach (var oldFile in Directory.EnumerateFiles(folder, "*.json"))
+                File.Delete(oldFile);
         }
     }
 }

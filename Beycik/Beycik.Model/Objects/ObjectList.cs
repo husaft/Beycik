@@ -185,8 +185,14 @@ namespace Beycik.Model.Objects
         [XmlElement("BUTTON", typeof(Button))]
         public List<ObjectNode> Items { get; set; }
         
+        [XmlIgnore] public IEnumerable<Button> Buttons => Items.OfType<Button>();
         [XmlIgnore] public IEnumerable<CheckBox> CheckBoxes => Items.OfType<CheckBox>();
+        [XmlIgnore] public IEnumerable<Container> Containers => Items.OfType<Container>();
+        [XmlIgnore] public IEnumerable<DropDown> DropDowns => Items.OfType<DropDown>();
         [XmlIgnore] public IEnumerable<Frame> Frames => Items.OfType<Frame>();
+        [XmlIgnore] public IEnumerable<HotSpot> HotSpots => Items.OfType<HotSpot>();
+        [XmlIgnore] public IEnumerable<Image> Images => Items.OfType<Image>();
+        [XmlIgnore] public IEnumerable<Info> Infos => Items.OfType<Info>();
         [XmlIgnore] public IEnumerable<Line> Lines => Items.OfType<Line>();
         [XmlIgnore] public IEnumerable<Rectangle> Rectangles => Items.OfType<Rectangle>();
         [XmlIgnore] public IEnumerable<Text> Texts => Items.OfType<Text>();

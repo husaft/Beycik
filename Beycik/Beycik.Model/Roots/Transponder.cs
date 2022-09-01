@@ -19,7 +19,7 @@ namespace Beycik.Model.Roots
         [XmlElement("PROTOCOL")]
         public string ProtocolStr
         {
-            get => ValueEx.FormatEnum(Protocol);
+            get => ValueEx.FormatEnum(Protocol, true);
             set => Protocol = ValueEx.ParseEnum<Protocol>(value);
         }
         

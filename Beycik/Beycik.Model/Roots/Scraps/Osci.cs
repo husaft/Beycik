@@ -42,7 +42,7 @@ namespace Beycik.Model.Roots.Scraps
         [XmlElement("DEBUG_LEVEL")]
         public string DebugLevelStr
         {
-            get => ValueEx.FormatEnum(DebugLevel);
+            get => ValueEx.FormatEnum(DebugLevel, false);
             set => DebugLevel = ValueEx.ParseEnum<Level>(value);
         }
         

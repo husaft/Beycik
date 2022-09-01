@@ -44,6 +44,6 @@ namespace Beycik.Model.Objects
         public string Value { get; set; }
         
         [XmlElement("ITEM")] 
-        public List<Item> Items { get; set; }
+        public List<Item> Options { get; set; }
     }
 }
