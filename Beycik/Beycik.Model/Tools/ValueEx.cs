@@ -54,16 +54,16 @@ namespace Beycik.Model.Tools
         public static byte? ParseByte(string value)
             => byte.TryParse(value, out var v) ? v : null;
 
-        public static string FormatEnum<T>(T value, bool upper) where T : struct
+        public static string FormatEnum<T>(T value, bool upper = false) where T : struct
         {
             var txt = value.ToString();
             return upper ? txt?.ToUpperInvariant() : txt?.ToLowerInvariant();
         }
 
-        public static string FormatEnum<T>(T? value) where T : struct
+        public static string FormatEnum<T>(T? value, bool upper = false) where T : struct
         {
             var txt = value?.ToString();
-            return txt?.ToLowerInvariant();
+            return upper ? txt?.ToUpperInvariant() : txt?.ToLowerInvariant();
         }
         
         public static T ParseEnum<T>(string value) where T : struct

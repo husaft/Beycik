@@ -10,13 +10,13 @@ namespace Beycik.Model.Objects
     public class Info : AbstractBox, IContent
     {
         [XmlIgnore]
-        public IconSize IconSize { get; set; }
+        public IconSize? IconSize { get; set; }
         
         [XmlAttribute("iconsize")]
         public string IconSizeStr
         {
-            get => ValueEx.FormatEnum(IconSize, false);
-            set => IconSize = ValueEx.ParseEnum<IconSize>(value);
+            get => ValueEx.FormatEnum(IconSize);
+            set => IconSize = ValueEx.TryParseEnum<IconSize>(value);
         }
 
         [XmlText]
