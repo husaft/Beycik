@@ -1,10 +1,13 @@
 using System;
+using System.Globalization;
 using static System.Globalization.DateTimeStyles;
 
 namespace Beycik.Model.Tools
 {
     public static class ValueEx
     {
+        private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
+
         public static string FormatBool(bool? value)
         {
             string txt;
@@ -39,17 +42,17 @@ namespace Beycik.Model.Tools
 
         public static string FormatFloat(float? value, bool removeZero = false)
         {
-            var text = value?.ToString("F2");
+            var text = value?.ToString("F2", Inv);
             if (removeZero)
                 text = text?.Replace(".00", string.Empty);
             return text;
         }
 
-        public static float? ParseFloat(string value)
-            => float.TryParse(value, out var v) ? v : null;
+        public static float? ParseFloat(string t)
+            => float.TryParse(t, NumberStyles.Any, Inv, out var v) ? v : null;
 
-        public static double? ParseDouble(string value)
-            => double.TryParse(value, out var v) ? v : null;
+        public static double? ParseDouble(string t)
+            => double.TryParse(t, NumberStyles.Any, Inv, out var v) ? v : null;
 
         public static byte? ParseByte(string value)
             => byte.TryParse(value, out var v) ? v : null;
@@ -103,7 +106,7 @@ namespace Beycik.Model.Tools
             => char.TryParse(value, out var v) ? v : null;
 
         public static string FormatDouble(double? value)
-            => value?.ToString("F6");
+            => value?.ToString("F6", Inv);
 
         public static string FormatDate(DateTime date, string format)
             => date.ToString(format);
