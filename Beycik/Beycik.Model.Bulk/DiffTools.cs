@@ -117,6 +117,9 @@ namespace Beycik.Model.Bulk
                             foreach (var (i, content) in AsString(jaa))
                                 if (i >= 0)
                                     jaa[i] = content;
+                            for (var i = 0; i < jaa.Count; i++)
+                                if (jaa[i].Type == JTokenType.Null)
+                                    jaa[i] = string.Empty;
                         }
                         if (propVal is JObject { Count: 1 } jo)
                         {
