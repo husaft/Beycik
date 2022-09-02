@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beycik.Model.Tests", "Beyci
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beycik.Model.Bulk", "Beycik.Model.Bulk\Beycik.Model.Bulk.csproj", "{4C3784C5-219B-4D73-9DBC-9A2EEF471A0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beycik.PDF", "Beycik.PDF\Beycik.PDF.csproj", "{320EB37E-D9EC-4F80-AC48-0C3EDD1DD05D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beycik.PDF.Tests", "Beycik.PDF.Tests\Beycik.PDF.Tests.csproj", "{DC96AC5E-C594-4AFA-9320-B763161B3AC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +46,13 @@ Global
 		{4C3784C5-219B-4D73-9DBC-9A2EEF471A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C3784C5-219B-4D73-9DBC-9A2EEF471A0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C3784C5-219B-4D73-9DBC-9A2EEF471A0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{320EB37E-D9EC-4F80-AC48-0C3EDD1DD05D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{320EB37E-D9EC-4F80-AC48-0C3EDD1DD05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{320EB37E-D9EC-4F80-AC48-0C3EDD1DD05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{320EB37E-D9EC-4F80-AC48-0C3EDD1DD05D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC96AC5E-C594-4AFA-9320-B763161B3AC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC96AC5E-C594-4AFA-9320-B763161B3AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC96AC5E-C594-4AFA-9320-B763161B3AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC96AC5E-C594-4AFA-9320-B763161B3AC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
