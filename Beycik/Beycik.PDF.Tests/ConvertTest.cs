@@ -1,14 +1,8 @@
 using Xunit;
-using System.IO;
 using Beycik.Model;
-using Xunit;
 using static Beycik.Model.Tests.TestHelper;
-using System;
-using System.IO;
 using System.Linq;
-using Beycik.Model.Tests;
-using Xunit;
-using static Beycik.Model.Tests.TestHelper;
+using Beycik.PDF.Config;
 
 namespace Beycik.PDF.Tests
 {
@@ -31,9 +25,27 @@ namespace Beycik.PDF.Tests
             var otherDir = origFile.Replace(".PDF.Tests", ".Model.Tests");
             var inputDoc = XmlHelper.ReadFile($"{otherDir}.xml");
 
+            Assert.Equal($"{ver}.0", inputDoc.Version.ToString());
+            var formId = inputDoc.FormInfo.FormServer.FormId.ToString();
+            var fName = name.Split('_').First();
+            Assert.Equal(fName, formId.PadLeft(4, '0'));
+
+            var options = interactive ? PdfOption.GetInteractive() : PdfOption.GetReadOnly();
+            var src = $"{origFile}_{(interactive ? "iv" : "ro")}.pdf";
+            var dest = src.Replace("Resources", "Outputs");
+            CreateFolderOf(dest);
 
 
+
+
+
+
+            // TODO ?!
             ;
+
+
+
+
 
 
 
