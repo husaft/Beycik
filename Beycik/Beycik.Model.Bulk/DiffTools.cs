@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using Beycik.Model.Roots;
+using Beycik.Model.Tools;
 using JsonDiffPatchDotNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -146,11 +147,18 @@ namespace Beycik.Model.Bulk
                                             .Replace('\n' + "", string.Empty);
                                     if (string.IsNullOrWhiteSpace(strTxt))
                                         continue;
+                                    if (ValueEx.CheckIfNumber(strTxt))
+                                    {
+                                        var frac = ValueEx.GetFractionLength(strTxt);
+                                        if (frac != 0)
+                                        {
+                                            var val = double.Parse(strTxt);
+                                            if (frac == 1)
+                                                strTxt = val.ToString("F2", ValueEx.Inv);
+                                            strTxt = strTxt.TrimEnd('0').TrimEnd('.');
+                                        }
+                                    }
                                     propVal = strTxt;
-                                    if (strTxt!.EndsWith(".00"))
-                                        propVal = strTxt[..^3];
-                                    else if (strTxt!.EndsWith(".0"))
-                                        propVal = strTxt[..^2];
                                     break;
                             }
                         if (propName.StartsWith("#"))

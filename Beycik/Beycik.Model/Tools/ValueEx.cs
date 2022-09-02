@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using DS = System.Globalization.DateTimeStyles;
 using NU = System.Globalization.NumberStyles;
 
@@ -11,7 +12,7 @@ namespace Beycik.Model.Tools
 {
     public static class ValueEx
     {
-        private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
+        public static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
 
         #region Bool
         private enum YesNo { No = 0, Yes = 1 }
@@ -77,14 +78,19 @@ namespace Beycik.Model.Tools
         #endregion
 
         #region Helpers
-        private static int GetFractionLength(string value)
+        public static int GetFractionLength(string value)
         {
             const StringComparison cmp = StringComparison.Ordinal;
             const string pt = ".";
             if (!value.Contains(pt, cmp)) return 0;
             return value.Length - (value.IndexOf(pt, cmp) + 1);
         }
-
+        
+        public static bool CheckIfNumber(string value)
+        {
+            return Regex.IsMatch(value, "^[-+]?[0-9]*\\.?[0-9]+$");
+        }
+        
         private static EnumStyle GetEnumStyle(string value)
         {
             return value.All(char.IsUpper) ? EnumStyle.UpperCase :

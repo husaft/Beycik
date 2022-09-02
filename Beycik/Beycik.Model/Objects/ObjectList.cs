@@ -100,13 +100,13 @@ namespace Beycik.Model.Objects
         }
         
         [XmlIgnore]
-        public byte? MaxLin { get; set; }
+        public short? MaxLin { get; set; }
         
         [XmlAttribute("maxLIN")]
         public string MaxLinStr
         {
-            get => ValueEx.FormatByte(MaxLin);
-            set => MaxLin = ValueEx.ParseByte(value);
+            get => ValueEx.FormatShort(MaxLin);
+            set => MaxLin = ValueEx.ParseShort(value);
         }
         
         [XmlIgnore]
@@ -120,53 +120,53 @@ namespace Beycik.Model.Objects
         }
         
         [XmlIgnore]
-        public byte? MaxTxa { get; set; }
+        public short? MaxTxa { get; set; }
         
         [XmlAttribute("maxTXA")]
         public string MaxTxaStr
         {
-            get => ValueEx.FormatByte(MaxTxa);
-            set => MaxTxa = ValueEx.ParseByte(value);
+            get => ValueEx.FormatShort(MaxTxa);
+            set => MaxTxa = ValueEx.ParseShort(value);
         }
         
         [XmlIgnore]
-        public byte? MaxTxc { get; set; }
+        public short? MaxTxc { get; set; }
         
         [XmlAttribute("maxTXC")]
         public string MaxTxcStr
         {
-            get => ValueEx.FormatByte(MaxTxc);
-            set => MaxTxc = ValueEx.ParseByte(value);
+            get => ValueEx.FormatShort(MaxTxc);
+            set => MaxTxc = ValueEx.ParseShort(value);
         }
         
         [XmlIgnore]
-        public byte? MaxTxf { get; set; }
+        public short? MaxTxf { get; set; }
         
         [XmlAttribute("maxTXF")]
         public string MaxTxfStr
         {
-            get => ValueEx.FormatByte(MaxTxf);
-            set => MaxTxf = ValueEx.ParseByte(value);
+            get => ValueEx.FormatShort(MaxTxf);
+            set => MaxTxf = ValueEx.ParseShort(value);
         }
         
         [XmlIgnore]
-        public byte? MaxTxt { get; set; }
+        public short? MaxTxt { get; set; }
         
         [XmlAttribute("maxTXT")]
         public string MaxTxtStr
         {
-            get => ValueEx.FormatByte(MaxTxt);
-            set => MaxTxt = ValueEx.ParseByte(value);
+            get => ValueEx.FormatShort(MaxTxt);
+            set => MaxTxt = ValueEx.ParseShort(value);
         }
         
         [XmlIgnore]
-        public byte? MaxUlg { get; set; }
+        public short? MaxUlg { get; set; }
         
         [XmlAttribute("maxULG")]
         public string MaxUlgStr
         {
-            get => ValueEx.FormatByte(MaxUlg);
-            set => MaxUlg = ValueEx.ParseByte(value);
+            get => ValueEx.FormatShort(MaxUlg);
+            set => MaxUlg = ValueEx.ParseShort(value);
         }
         
         [XmlElement("RECTANGLE", typeof(Rectangle))]

@@ -58,6 +58,7 @@ namespace Beycik.Model.Bulk
 
                 var text = string.Join(Environment.NewLine, errors.Select(e => $"   {e}"));
                 Console.WriteLine(text);
+                Environment.ExitCode = -1;
                 break;
             }
 
