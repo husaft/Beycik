@@ -63,6 +63,18 @@ namespace Beycik.Model.Tools
             return short.TryParse(value, out var v) ? v : null;
         }
         #endregion
+        
+        #region Unsigned Short
+        public static string FormatUShort(ushort? value)
+        {
+            return value?.ToString();
+        }
+
+        public static ushort? ParseUShort(string value)
+        {
+            return ushort.TryParse(value, out var v) ? v : null;
+        }
+        #endregion
 
         #region Helpers
         private static int GetFractionLength(string value)

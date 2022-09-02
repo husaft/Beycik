@@ -134,13 +134,16 @@ namespace Beycik.Model.Bulk
                                 case JTokenType.Null:
                                     continue;
                                 case JTokenType.Integer:
-                                    var intTxt = jv.Value?.ToString();
+                                    var intTxt = jv.Value<string>();
                                     propVal = intTxt;
                                     break;
                                 case JTokenType.String:
-                                    var strTxt = jv.Value?.ToString()?
+                                    var strTxt = jv.Value<string>()
                                         .Replace("\r\n", "\n")
                                         .Trim();
+                                    if (strTxt.Length > 72)
+                                        strTxt = strTxt.Replace('\r' + "", string.Empty)
+                                            .Replace('\n' + "", string.Empty);
                                     if (string.IsNullOrWhiteSpace(strTxt))
                                         continue;
                                     propVal = strTxt;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Beycik.Model.Tools;
 
 namespace Beycik.Model.Bulk
 {
@@ -32,6 +33,11 @@ namespace Beycik.Model.Bulk
             var errors = new List<string>();
             XmlHelper.Errors = errors;
             DiffTools.CleanUp(outFolder);
+            ValueEx.SetUpQuirks(
+                null,
+                null,
+                new Dictionary<string, EnumStyle>()
+            );
 
             var num = 0;
             foreach (var file in files)

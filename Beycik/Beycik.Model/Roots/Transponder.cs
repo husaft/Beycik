@@ -10,8 +10,15 @@ namespace Beycik.Model.Roots
         [XmlElement("HOST")]
         public string Host { get; set; }
         
+        [XmlIgnore]
+        public ushort? Port { get; set; }
+        
         [XmlElement("PORT")]
-        public ushort Port { get; set; }
+        public string PortStr
+        {
+            get => ValueEx.FormatUShort(Port);
+            set => Port = ValueEx.ParseUShort(value);
+        }
 
         [XmlIgnore]
         public Protocol? Protocol { get; set; }
