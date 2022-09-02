@@ -20,7 +20,7 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
             var origin = GetOrigin(t ?? f, m);
-            if (!Styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
+            if (Styles == null || !Styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
             YesNo? answer = value.HasValue ? value.Value ? YesNo.Yes : YesNo.No : null;
             var txt = WithEnumStyle(answer, style);
             return txt;
@@ -29,8 +29,11 @@ namespace Beycik.Model.Tools
         public static bool? ParseBool(string value,
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            var origin = GetOrigin(t ?? f, m);
-            Styles[origin] = GetEnumStyle(value);
+            if (Styles != null)
+            {
+                var origin = GetOrigin(t ?? f, m);
+                Styles[origin] = GetEnumStyle(value);
+            }
             return Enum.TryParse<YesNo>(value, ignoreCase: true, out var v)
                 ? v == YesNo.Yes
                 : null;
@@ -106,7 +109,7 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
             var origin = GetOrigin(t ?? f, m);
-            if (!Fractions.TryGetValue(origin, out var length)) length = 2;
+            if (Fractions == null || !Fractions.TryGetValue(origin, out var length)) length = 2;
             var txt = value?.ToString($"F{length}", Inv);
             return txt;
         }
@@ -114,8 +117,11 @@ namespace Beycik.Model.Tools
         public static float? ParseFloat(string value,
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            var origin = GetOrigin(t ?? f, m);
-            Fractions[origin] = GetFractionLength(value);
+            if (Fractions != null)
+            {
+                var origin = GetOrigin(t ?? f, m);
+                Fractions[origin] = GetFractionLength(value);
+            }
             return float.TryParse(value, NU.Any, Inv, out var v) ? v : null;
         }
         #endregion
@@ -125,7 +131,7 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
             var origin = GetOrigin(t ?? f, m);
-            if (!Fractions.TryGetValue(origin, out var length)) length = 6;
+            if (Fractions == null || !Fractions.TryGetValue(origin, out var length)) length = 6;
             var txt = value?.ToString($"F{length}", Inv);
             return txt;
         }
@@ -133,8 +139,11 @@ namespace Beycik.Model.Tools
         public static double? ParseDouble(string value,
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            var origin = GetOrigin(t ?? f, m);
-            Fractions[origin] = GetFractionLength(value);
+            if (Fractions != null)
+            {
+                var origin = GetOrigin(t ?? f, m);
+                Fractions[origin] = GetFractionLength(value);
+            }
             return double.TryParse(value, NU.Any, Inv, out var v) ? v : null;
         }
         #endregion
@@ -157,7 +166,7 @@ namespace Beycik.Model.Tools
             where T : struct
         {
             var origin = GetOrigin(t ?? f, m);
-            if (!Styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
+            if (Styles == null || !Styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
             var txt = WithEnumStyle(value, style);
             return txt;
         }
@@ -166,8 +175,11 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "") 
             where T : struct
         {
-            var origin = GetOrigin(t ?? f, m);
-            Styles[origin] = GetEnumStyle(value);
+            if (Styles != null)
+            {
+                var origin = GetOrigin(t ?? f, m);
+                Styles[origin] = GetEnumStyle(value);
+            }
             return Enum.TryParse<T>(value, ignoreCase: true, out var v) ? v : null;
         }
         #endregion
@@ -201,7 +213,7 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
             var origin = GetOrigin(t ?? f, m);
-            if (!NewLines.TryGetValue(origin, out var addFeed)) addFeed = false;
+            if (NewLines == null || !NewLines.TryGetValue(origin, out var addFeed)) addFeed = false;
             var txt = Convert.ToBase64String(value, Base64FormattingOptions.InsertLineBreaks);
             if (addFeed)
                 txt += "\r\n";
@@ -211,8 +223,11 @@ namespace Beycik.Model.Tools
         public static byte[] ParseBytes(string value,
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            var origin = GetOrigin(t ?? f, m);
-            NewLines[origin] = value.LastOrDefault() == '\n';
+            if (NewLines != null)
+            {
+                var origin = GetOrigin(t ?? f, m);
+                NewLines[origin] = value.LastOrDefault() == '\n';
+            }
             var array = Convert.FromBase64String(value);
             return array;
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Beycik.Model.Tools;
 using Xunit;
 using static Beycik.Model.Tests.TestHelper;
 
@@ -9,6 +10,15 @@ namespace Beycik.Model.Tests
 {
     public class ModelTest
     {
+        static ModelTest()
+        {
+            ValueEx.SetUpQuirks(
+                new Dictionary<string, int>(),
+                new Dictionary<string, bool>(),
+                new Dictionary<string, EnumStyle>()
+            );
+        }
+        
         [Theory]
         [InlineData("0001")]
         [InlineData("0002")]

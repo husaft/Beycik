@@ -1,6 +1,6 @@
 ﻿namespace Beycik.Model.Tools
 {
-    internal enum EnumStyle
+    public enum EnumStyle
     {
         None = 0,
 
