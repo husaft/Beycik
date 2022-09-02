@@ -16,7 +16,7 @@ namespace Beycik.Model.Objects
         public string IconSizeStr
         {
             get => ValueEx.FormatEnum(IconSize);
-            set => IconSize = ValueEx.TryParseEnum<IconSize>(value);
+            set => IconSize = ValueEx.ParseEnum<IconSize>(value);
         }
 
         [XmlText]

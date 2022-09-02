@@ -1,6 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
-using static System.Globalization.DateTimeStyles;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using DS = System.Globalization.DateTimeStyles;
+using NU = System.Globalization.NumberStyles;
 
 namespace Beycik.Model.Tools
 {
@@ -8,130 +13,223 @@ namespace Beycik.Model.Tools
     {
         private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
 
-        public static string FormatBool(bool? value)
+        #region Bool
+        private enum YesNo { No = 0, Yes = 1 }
+
+        public static string FormatBool(bool? value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            string txt;
-            switch (value)
-            {
-                case true:
-                    txt = "yes";
-                    break;
-                case false:
-                    txt = "no";
-                    break;
-                default:
-                    return null;
-            }
-            txt = txt.ToLowerInvariant();
+            var origin = GetOrigin(t ?? f, m);
+            if (!Styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
+            YesNo? answer = value.HasValue ? value.Value ? YesNo.Yes : YesNo.No : null;
+            var txt = WithEnumStyle(answer, style);
             return txt;
         }
 
-        public static bool? ParseBool(string value)
+        public static bool? ParseBool(string value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            var txt = value?.ToLowerInvariant();
-            switch (txt)
-            {
-                case "yes":
-                    return true;
-                case "no":
-                    return false;
-                default:
-                    return null;
-            }
+            var origin = GetOrigin(t ?? f, m);
+            Styles[origin] = GetEnumStyle(value);
+            return Enum.TryParse<YesNo>(value, ignoreCase: true, out var v)
+                ? v == YesNo.Yes
+                : null;
         }
+        #endregion
 
-        public static string FormatFloat(float? value, bool removeZero = false)
+        #region Byte
+        public static string FormatByte(byte? value)
         {
-            var text = value?.ToString("F2", Inv);
-            if (removeZero)
-                text = text?.Replace(".00", string.Empty);
-            return text;
+            return value?.ToString();
         }
-
-        public static float? ParseFloat(string t)
-            => float.TryParse(t, NumberStyles.Any, Inv, out var v) ? v : null;
-
-        public static double? ParseDouble(string t)
-            => double.TryParse(t, NumberStyles.Any, Inv, out var v) ? v : null;
 
         public static byte? ParseByte(string value)
-            => byte.TryParse(value, out var v) ? v : null;
-
-        public static string FormatEnum<T>(T value, bool upper = false) where T : struct
         {
-            var txt = value.ToString();
-            return upper ? txt?.ToUpperInvariant() : txt?.ToLowerInvariant();
+            return byte.TryParse(value, out var v) ? v : null;
         }
-        
-        public static string FormatMyEnum<T>(T value) where T : struct
+        #endregion
+
+        #region Short
+        public static string FormatShort(short? value)
         {
-            var txt = value.ToString();
+            return value?.ToString();
+        }
+
+        public static short? ParseShort(string value)
+        {
+            return short.TryParse(value, out var v) ? v : null;
+        }
+        #endregion
+
+        #region Helpers
+        private static int GetFractionLength(string value)
+        {
+            const StringComparison cmp = StringComparison.Ordinal;
+            const string pt = ".";
+            if (!value.Contains(pt, cmp)) return 0;
+            return value.Length - (value.IndexOf(pt, cmp) + 1);
+        }
+
+        private static EnumStyle GetEnumStyle(string value)
+        {
+            return value.All(char.IsUpper) ? EnumStyle.UpperCase :
+                value.All(char.IsLower) ? EnumStyle.LowerCase :
+                default;
+        }
+
+        private static string WithEnumStyle(object value, EnumStyle style)
+        {
+            var txt = value as string ?? value?.ToString();
+            switch (style)
+            {
+                case EnumStyle.LowerCase: return txt?.ToLowerInvariant();
+                case EnumStyle.UpperCase: return txt?.ToUpperInvariant();
+                default: return txt;
+            }
+        }
+
+        private static string GetOrigin(object obj, string member)
+        {
+            var clazz = obj is string s
+                ? Path.GetFileNameWithoutExtension(s)
+                : $"{obj.GetType().Name}_{obj.GetHashCode()}";
+            return $"{clazz}#{member}";
+        }
+
+        private static readonly SortedDictionary<string, int> Fractions = new();
+        private static readonly SortedDictionary<string, EnumStyle> Styles = new();
+        private static readonly SortedDictionary<string, bool> NewLines = new();
+        #endregion
+
+        #region Float
+        public static string FormatFloat(float? value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
+        {
+            var origin = GetOrigin(t ?? f, m);
+            if (!Fractions.TryGetValue(origin, out var length)) length = 2;
+            var txt = value?.ToString($"F{length}", Inv);
             return txt;
         }
 
-        public static string FormatEnum<T>(T? value, bool upper = false) where T : struct
+        public static float? ParseFloat(string value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            var txt = value?.ToString();
-            return upper ? txt?.ToUpperInvariant() : txt?.ToLowerInvariant();
+            var origin = GetOrigin(t ?? f, m);
+            Fractions[origin] = GetFractionLength(value);
+            return float.TryParse(value, NU.Any, Inv, out var v) ? v : null;
         }
-        
-        public static T ParseEnum<T>(string value) where T : struct
-            => Enum.Parse<T>(value, ignoreCase: true);
+        #endregion
 
-        public static T ParseMyEnum<T>(string value) where T : struct
-            => Enum.Parse<T>(value, ignoreCase: false);
-        
-        public static T? TryParseEnum<T>(string value) where T : struct
-            => Enum.TryParse<T>(value, ignoreCase: true, out var v) ? v : null;
-        
-        public static string FormatByte(byte? value)
-            => value?.ToString();
+        #region Double
+        public static string FormatDouble(double? value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
+        {
+            var origin = GetOrigin(t ?? f, m);
+            if (!Fractions.TryGetValue(origin, out var length)) length = 6;
+            var txt = value?.ToString($"F{length}", Inv);
+            return txt;
+        }
 
-        public static string FormatVersion(Version value)
-            => value.ToString();
+        public static double? ParseDouble(string value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
+        {
+            var origin = GetOrigin(t ?? f, m);
+            Fractions[origin] = GetFractionLength(value);
+            return double.TryParse(value, NU.Any, Inv, out var v) ? v : null;
+        }
+        #endregion
 
-        public static Version ParseVersion(string value)
-            => Version.Parse(value);
-
-        public static string FormatUri(Uri value)
-            => value.ToString();
-
-        public static Uri ParseUri(string value)
-            => new(value, UriKind.Absolute);
-
+        #region Char
         public static string FormatChar(char? value)
-            => value?.ToString();
+        {
+            return value?.ToString();
+        }
 
         public static char? ParseChar(string value)
-            => char.TryParse(value, out var v) ? v : null;
+        {
+            return char.TryParse(value, out var v) ? v : null;
+        }
+        #endregion
 
-        public static string FormatDouble(double? value)
-            => value?.ToString("F6", Inv);
+        #region Enum
+        public static string FormatEnum<T>(T? value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "") 
+            where T : struct
+        {
+            var origin = GetOrigin(t ?? f, m);
+            if (!Styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
+            var txt = WithEnumStyle(value, style);
+            return txt;
+        }
 
-        public static string FormatDate(DateTime date, string format)
-            => date.ToString(format);
+        public static T? ParseEnum<T>(string value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "") 
+            where T : struct
+        {
+            var origin = GetOrigin(t ?? f, m);
+            Styles[origin] = GetEnumStyle(value);
+            return Enum.TryParse<T>(value, ignoreCase: true, out var v) ? v : null;
+        }
+        #endregion
 
-        public static string FormatDate(DateTime? date, string format)
-            => date?.ToString(format);
+        #region Version
+        public static string FormatVersion(Version value)
+        {
+            return value?.ToString();
+        }
 
-        public static DateTime ParseDate(string value, string format)
-            => DateTime.ParseExact(value, format, null);
+        public static Version ParseVersion(string value)
+        {
+            return Version.TryParse(value, out var v) ? v : null;
+        }
+        #endregion
 
-        public static DateTime? TryParseDate(string value, string format)
-            => DateTime.TryParseExact(value, format, null, None, out var v)
+        #region Uri
+        public static string FormatUri(Uri value)
+        {
+            return value.ToString();
+        }
+
+        public static Uri ParseUri(string value)
+        {
+            return new Uri(value, UriKind.Absolute);
+        }
+        #endregion
+
+        #region Bytes
+        public static string FormatBytes(byte[] value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
+        {
+            var origin = GetOrigin(t ?? f, m);
+            if (!NewLines.TryGetValue(origin, out var addFeed)) addFeed = false;
+            var txt = Convert.ToBase64String(value, Base64FormattingOptions.InsertLineBreaks);
+            if (addFeed)
+                txt += "\r\n";
+            return txt;
+        }
+
+        public static byte[] ParseBytes(string value,
+            object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
+        {
+            var origin = GetOrigin(t ?? f, m);
+            NewLines[origin] = value.LastOrDefault() == '\n';
+            var array = Convert.FromBase64String(value);
+            return array;
+        }
+        #endregion
+
+        #region Date
+        public static string FormatDate(DateTime? value, string format)
+        {
+            return value?.ToString(format);
+        }
+
+        public static DateTime? ParseDate(string value, string format)
+        {
+            return DateTime.TryParseExact(value, format, Inv, DS.None, out var v)
                 ? v
                 : null;
-
-        public static string FormatBytes(byte[] value) 
-            => Convert.ToBase64String(value, Base64FormattingOptions.InsertLineBreaks);
-
-        public static byte[] ParseBytes(string value) 
-            => Convert.FromBase64String(value);
-
-        public static short? ParseShort(string value) 
-            => short.TryParse(value, out var v) ? v : null;
-
-        public static string FormatShort(short? value) 
-            => value?.ToString();
+        }
+        #endregion
     }
 }

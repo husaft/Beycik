@@ -36,8 +36,8 @@ namespace Beycik.Model.Objects.Core
         [XmlAttribute("fontsize")]
         public string FontSizeStr
         {
-            get => ValueEx.FormatFloat(FontSize, true);
-            set => FontSize = ValueEx.ParseFloat(value);
+            get => ValueEx.FormatFloat(FontSize, this);
+            set => FontSize = ValueEx.ParseFloat(value, this);
         }
 
         [XmlIgnore]

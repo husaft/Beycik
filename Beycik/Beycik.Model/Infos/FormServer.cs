@@ -27,7 +27,7 @@ namespace Beycik.Model.Infos
         public byte FormVersion { get; set; }
         
         [XmlIgnore]
-        public DateTime FormTime { get; set; }
+        public DateTime? FormTime { get; set; }
         
         [XmlElement("FORMTIME")]
         public string FormTimeStr

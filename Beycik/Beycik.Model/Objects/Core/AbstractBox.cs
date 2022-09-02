@@ -72,16 +72,9 @@ namespace Beycik.Model.Objects.Core
         [XmlAttribute("label")] 
         public string Label { get; set; }
 
-        [XmlIgnore] 
-        public float? FsEnd { get; set; }
-
         [XmlAttribute("fsend")]
-        public string FsEndStr
-        {
-            get => ValueEx.FormatFloat(FsEnd);
-            set => FsEnd = ValueEx.ParseFloat(value);
-        }
-        
+        public string FsEnd { get; set; }
+
         [XmlIgnore] 
         public byte? FsStart { get; set; }
         

@@ -14,13 +14,13 @@ namespace Beycik.Model.Roots
         public ushort Port { get; set; }
 
         [XmlIgnore]
-        public Protocol Protocol { get; set; }
+        public Protocol? Protocol { get; set; }
         
         [XmlElement("PROTOCOL")]
         public string ProtocolStr
         {
-            get => ValueEx.FormatMyEnum(Protocol);
-            set => Protocol = ValueEx.ParseMyEnum<Protocol>(value);
+            get => ValueEx.FormatEnum(Protocol);
+            set => Protocol = ValueEx.ParseEnum<Protocol>(value);
         }
         
         [XmlElement("OSCI")]

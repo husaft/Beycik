@@ -19,7 +19,7 @@ namespace Beycik.Model.Objects
         }
 
         [XmlIgnore]
-        public SizeType SizeType { get; set; }
+        public SizeType? SizeType { get; set; }
         
         [XmlAttribute("sizetype")]
         public string SizeTypeStr

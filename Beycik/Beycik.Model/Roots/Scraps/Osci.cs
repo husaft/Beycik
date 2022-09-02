@@ -37,7 +37,7 @@ namespace Beycik.Model.Roots.Scraps
         public string ProviderAccreditation { get; set; }
         
         [XmlIgnore]
-        public Level DebugLevel { get; set; }
+        public Level? DebugLevel { get; set; }
         
         [XmlElement("DEBUG_LEVEL")]
         public string DebugLevelStr

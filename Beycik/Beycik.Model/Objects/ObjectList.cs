@@ -110,13 +110,13 @@ namespace Beycik.Model.Objects
         }
         
         [XmlIgnore]
-        public byte? MaxRta { get; set; }
+        public short? MaxRta { get; set; }
         
         [XmlAttribute("maxRTA")]
         public string MaxRtaStr
         {
-            get => ValueEx.FormatByte(MaxRta);
-            set => MaxRta = ValueEx.ParseByte(value);
+            get => ValueEx.FormatShort(MaxRta);
+            set => MaxRta = ValueEx.ParseShort(value);
         }
         
         [XmlIgnore]

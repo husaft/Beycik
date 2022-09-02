@@ -47,7 +47,7 @@ namespace Beycik.Model.Objects
         public string AlignStr
         {
             get => ValueEx.FormatEnum(Align);
-            set => Align = ValueEx.TryParseEnum<Direction>(value);
+            set => Align = ValueEx.ParseEnum<Direction>(value);
         }
 
         [XmlAttribute("maxlen")]

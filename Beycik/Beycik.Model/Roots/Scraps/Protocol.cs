@@ -8,9 +8,7 @@ namespace Beycik.Model.Roots.Scraps
         None = 0,
 
         HTTP,
-        
-        http,
-        
+
         SOAP,
         
         OSCI

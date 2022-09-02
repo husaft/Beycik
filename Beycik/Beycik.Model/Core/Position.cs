@@ -12,8 +12,8 @@ namespace Beycik.Model.Core
         [XmlAttribute("x")]
         public string XStr
         {
-            get => ValueEx.FormatFloat(X);
-            set => X = ValueEx.ParseFloat(value);
+            get => ValueEx.FormatFloat(X, this);
+            set => X = ValueEx.ParseFloat(value, this);
         }
 
         [XmlIgnore]
@@ -22,8 +22,8 @@ namespace Beycik.Model.Core
         [XmlAttribute("y")]
         public string YStr
         {
-            get => ValueEx.FormatFloat(Y);
-            set => Y = ValueEx.ParseFloat(value);
+            get => ValueEx.FormatFloat(Y, this);
+            set => Y = ValueEx.ParseFloat(value, this);
         }
     }
 }

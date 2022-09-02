@@ -20,8 +20,8 @@ namespace Beycik.Model.Roots
         {
             get => ValueEx.FormatDate(ChangeTime,
                 ChangeTime.GetValueOrDefault().Second >= 1 ? DeDateS : DeDate);
-            set => ChangeTime = ValueEx.TryParseDate(value, DeDateS) ??
-                                ValueEx.TryParseDate(value, DeDate);
+            set => ChangeTime = ValueEx.ParseDate(value, DeDateS) ??
+                                ValueEx.ParseDate(value, DeDate);
         }
 
         [XmlIgnore] 
