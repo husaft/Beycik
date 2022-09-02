@@ -20,7 +20,7 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
             var origin = GetOrigin(t ?? f, m);
-            if (Styles == null || !Styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
+            if (_styles == null || !_styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
             YesNo? answer = value.HasValue ? value.Value ? YesNo.Yes : YesNo.No : null;
             var txt = WithEnumStyle(answer, style);
             return txt;
@@ -29,10 +29,10 @@ namespace Beycik.Model.Tools
         public static bool? ParseBool(string value,
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            if (Styles != null)
+            if (_styles != null)
             {
                 var origin = GetOrigin(t ?? f, m);
-                Styles[origin] = GetEnumStyle(value);
+                _styles[origin] = GetEnumStyle(value);
             }
             return Enum.TryParse<YesNo>(value, ignoreCase: true, out var v)
                 ? v == YesNo.Yes
@@ -99,9 +99,15 @@ namespace Beycik.Model.Tools
             return $"{clazz}#{member}";
         }
 
-        private static readonly SortedDictionary<string, int> Fractions = new();
-        private static readonly SortedDictionary<string, EnumStyle> Styles = new();
-        private static readonly SortedDictionary<string, bool> NewLines = new();
+        private static IDictionary<string, int> _fractions;
+        private static IDictionary<string, EnumStyle> _styles;
+        private static IDictionary<string, bool> _newLines;
+        
+        public static void SetUpQuirks(IDictionary<string, int> fractions, 
+            IDictionary<string, bool> newLines, IDictionary<string, EnumStyle> styles)
+        {
+            _fractions = fractions; _styles = styles; _newLines = newLines;
+        }
         #endregion
 
         #region Float
@@ -109,7 +115,7 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
             var origin = GetOrigin(t ?? f, m);
-            if (Fractions == null || !Fractions.TryGetValue(origin, out var length)) length = 2;
+            if (_fractions == null || !_fractions.TryGetValue(origin, out var length)) length = 2;
             var txt = value?.ToString($"F{length}", Inv);
             return txt;
         }
@@ -117,10 +123,10 @@ namespace Beycik.Model.Tools
         public static float? ParseFloat(string value,
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            if (Fractions != null)
+            if (_fractions != null)
             {
                 var origin = GetOrigin(t ?? f, m);
-                Fractions[origin] = GetFractionLength(value);
+                _fractions[origin] = GetFractionLength(value);
             }
             return float.TryParse(value, NU.Any, Inv, out var v) ? v : null;
         }
@@ -131,7 +137,7 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
             var origin = GetOrigin(t ?? f, m);
-            if (Fractions == null || !Fractions.TryGetValue(origin, out var length)) length = 6;
+            if (_fractions == null || !_fractions.TryGetValue(origin, out var length)) length = 6;
             var txt = value?.ToString($"F{length}", Inv);
             return txt;
         }
@@ -139,10 +145,10 @@ namespace Beycik.Model.Tools
         public static double? ParseDouble(string value,
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            if (Fractions != null)
+            if (_fractions != null)
             {
                 var origin = GetOrigin(t ?? f, m);
-                Fractions[origin] = GetFractionLength(value);
+                _fractions[origin] = GetFractionLength(value);
             }
             return double.TryParse(value, NU.Any, Inv, out var v) ? v : null;
         }
@@ -166,7 +172,7 @@ namespace Beycik.Model.Tools
             where T : struct
         {
             var origin = GetOrigin(t ?? f, m);
-            if (Styles == null || !Styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
+            if (_styles == null || !_styles.TryGetValue(origin, out var style)) style = EnumStyle.LowerCase;
             var txt = WithEnumStyle(value, style);
             return txt;
         }
@@ -175,10 +181,10 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "") 
             where T : struct
         {
-            if (Styles != null)
+            if (_styles != null)
             {
                 var origin = GetOrigin(t ?? f, m);
-                Styles[origin] = GetEnumStyle(value);
+                _styles[origin] = GetEnumStyle(value);
             }
             return Enum.TryParse<T>(value, ignoreCase: true, out var v) ? v : null;
         }
@@ -213,7 +219,7 @@ namespace Beycik.Model.Tools
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
             var origin = GetOrigin(t ?? f, m);
-            if (NewLines == null || !NewLines.TryGetValue(origin, out var addFeed)) addFeed = false;
+            if (_newLines == null || !_newLines.TryGetValue(origin, out var addFeed)) addFeed = false;
             var txt = Convert.ToBase64String(value, Base64FormattingOptions.InsertLineBreaks);
             if (addFeed)
                 txt += "\r\n";
@@ -223,10 +229,10 @@ namespace Beycik.Model.Tools
         public static byte[] ParseBytes(string value,
             object t = null, [CallerFilePath] string f = "", [CallerMemberName] string m = "")
         {
-            if (NewLines != null)
+            if (_newLines != null)
             {
                 var origin = GetOrigin(t ?? f, m);
-                NewLines[origin] = value.LastOrDefault() == '\n';
+                _newLines[origin] = value.LastOrDefault() == '\n';
             }
             var array = Convert.FromBase64String(value);
             return array;
