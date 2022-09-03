@@ -77,6 +77,7 @@ namespace Beycik.PDF
             {
                 var page = pages[item.Page];
                 var font = FontHandle.ApplyFrom(item);
+                var rect = PdfRect.ApplyFrom(item);
 
                 // TODO
             }
