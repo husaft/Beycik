@@ -1,8 +1,10 @@
+using System.IO;
 using Xunit;
 using Beycik.Model;
-using static Beycik.Model.Tests.TestHelper;
 using System.Linq;
 using Beycik.PDF.Config;
+using static Beycik.Model.Tests.TestHelper;
+using static Beycik.PDF.Tests.PestHelper;
 
 namespace Beycik.PDF.Tests
 {
@@ -35,20 +37,12 @@ namespace Beycik.PDF.Tests
             var dest = src.Replace("Resources", "Outputs");
             CreateFolderOf(dest);
 
+            using var convertor = new Xml2Pdf(inputDoc);
+            convertor.Save(dest, options, GetStd(boPatch));
 
-
-
-
-
-            // TODO ?!
-            ;
-
-
-
-
-
-
-
+            var (a, b) = LoadLines(src, dest);
+            Assert.Equal(a, b);
+            Assert.Equal(new FileInfo(src).Length, new FileInfo(dest).Length);
         }
     }
 }
