@@ -1,7 +1,10 @@
 ﻿using System;
+using Beycik.Draw;
 using Beycik.Model.Roots;
 using Beycik.PDF.Config;
 using Beycik.Draw.Fonts.API;
+using Beycik.PDF.Core;
+using Beycik.PDF.Text;
 using static Beycik.PDF.Tools.PdfExt;
 
 namespace Beycik.PDF
@@ -27,13 +30,28 @@ namespace Beycik.PDF
             config.Author = CleanText(config.Author);
         }
 
-        public void Save(string pdfFile, PdfOptions options,
-            IConfig cfg = null, IFontManager fm = null)
+        public int Save(string pdfFile, PdfOptions options, IConfig cfg = null,
+            IFontManager fm = null, IEncodingPatcher enc = null)
         {
             var config = cfg ?? new PdfConfig();
             FillConfig(config, _doc);
 
-            throw new NotImplementedException();
+            var fonts = fm ?? Graphics.FontManager;
+            var defEnc = enc ?? new DefaultEncPatcher();
+
+            var pdf = Transform(fonts, defEnc, _doc, config, options);
+            var size = pdf.ExportToFile(pdfFile);
+            return size;
+        }
+
+        private static PdfDocument Transform(IFontManager fonts, IEncodingPatcher enc,
+            XmlDoc doc, IConfig config, PdfOptions options)
+        {
+            var pdf = new PdfDocument(config, options);
+
+            // TODO
+
+            return pdf;
         }
     }
 }

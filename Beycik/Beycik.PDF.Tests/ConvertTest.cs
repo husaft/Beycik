@@ -20,6 +20,16 @@ namespace Beycik.PDF.Tests
         public void ShouldWriteV3PartR(string name, double? boPatch = null)
             => ShouldWrite(name, "part", "3", false, boPatch);
 
+        [Theory]
+        [InlineData("3491_te", 0.1)]
+        public void ShouldWriteV4PartI(string name, double? boPatch = null)
+            => ShouldWrite(name, "part", "4", true, boPatch);
+
+        [Theory]
+        [InlineData("3491_te", 0.1)]
+        public void ShouldWriteV4PartR(string name, double? boPatch = null)
+            => ShouldWrite(name, "part", "4", false, boPatch);
+
         private static void ShouldWrite(string name, string dir, string ver,
             bool interactive, double? boPatch = null)
         {
