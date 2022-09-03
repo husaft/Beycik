@@ -86,7 +86,7 @@ namespace Beycik.PDF
                 switch (item)
                 {
                     case Image im:
-                        Handle(rect, im, page, pdf, font);
+                        Handle(rect, im, page);
                         continue;
                     case TextO te:
                         Handle(fonts, te, page, pdf, rect, font);

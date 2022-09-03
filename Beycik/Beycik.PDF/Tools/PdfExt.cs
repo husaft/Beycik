@@ -36,6 +36,12 @@ namespace Beycik.PDF.Tools
             return txt.Contains('.') ? txt : $"{txt}.0";
         }
 
+        public static string T(this decimal value)
+        {
+            var txt = value.ToString("N17", Inv);
+            return txt.Contains('.') ? txt : $"{txt}.0";
+        }
+
         public static bool Is(this double first, double second)
         {
             return Math.Abs(first - second) < 0.001;

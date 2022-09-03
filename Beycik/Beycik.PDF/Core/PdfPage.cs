@@ -29,7 +29,7 @@ namespace Beycik.PDF.Core
             PageIdx = pageIdx;
             Width = width;
             Height = height;
-            Stream = new PdfStream(Config);
+            Stream = new PdfStream(Config, this);
             Annotations = new PdfAnnotations(Config);
         }
 
