@@ -43,5 +43,10 @@ namespace Beycik.PDF.Core
             pos += xRef.Write(stream, pos);
             return pos;
         }
+
+        public PdfPage CreatePage(int pageIdx, double width, double height)
+        {
+            return Catalog.Pages.CreatePage(pageIdx, width, height, this);
+        }
     }
 }

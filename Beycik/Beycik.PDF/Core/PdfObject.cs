@@ -34,6 +34,12 @@ namespace Beycik.PDF.Core
             return bin.Length;
         }
 
+        protected int Write(Stream stream, byte[] cont)
+        {
+            stream.Write(cont);
+            return cont.Length;
+        }
+
         public virtual int ReNumber(int id)
         {
             Id = id++;

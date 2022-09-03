@@ -41,5 +41,12 @@ namespace Beycik.PDF.Core
                 id = page.ReNumber(id);
             return id;
         }
+
+        public PdfPage CreatePage(int pageIdx, double width, double height, PdfDocument doc)
+        {
+            var page = new PdfPage(Config, pageIdx, width, height, doc);
+            Pages.Add(page);
+            return page;
+        }
     }
 }

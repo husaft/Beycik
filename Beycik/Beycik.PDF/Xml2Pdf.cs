@@ -5,6 +5,7 @@ using Beycik.PDF.Config;
 using Beycik.Draw.Fonts.API;
 using Beycik.PDF.Core;
 using Beycik.PDF.Text;
+using Beycik.PDF.Visuals;
 using static Beycik.PDF.Tools.PdfConst;
 using static Beycik.PDF.Tools.PdfExt;
 
@@ -56,8 +57,21 @@ namespace Beycik.PDF
         private static PdfDocument Transform(IFontManager fonts, IEncodingPatcher enc,
             XmlDoc doc, IConfig config, PdfOptions options)
         {
-            var pageSize = GetPageSize(doc);
+            var (pageWidth, pageHeight) = GetPageSize(doc);
             var pdf = new PdfDocument(config, options);
+
+            var pages = pdf.Catalog.Pages.Pages;
+            var pageIdx = -1;
+            foreach (var item in doc.Objects.Items)
+                while (pageIdx < item.Page)
+                {
+                    ++pageIdx;
+                    var page = pdf.CreatePage(pageIdx, pageWidth, pageHeight);
+                    if (options.PrintOnly)
+                    {
+                        page.Stream.SetColor(Colors.Gray);
+                    }
+                }
 
             // TODO
 
