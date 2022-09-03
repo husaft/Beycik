@@ -5,6 +5,7 @@ using Beycik.PDF.Config;
 using Beycik.Draw.Fonts.API;
 using Beycik.PDF.Core;
 using Beycik.PDF.Text;
+using static Beycik.PDF.Tools.PdfConst;
 using static Beycik.PDF.Tools.PdfExt;
 
 namespace Beycik.PDF
@@ -30,6 +31,14 @@ namespace Beycik.PDF
             config.Author = CleanText(config.Author);
         }
 
+        private static (double width, double height) GetPageSize(XmlDoc doc)
+        {
+            var pageSize = doc.FormInfo.PageSize;
+            var pageHeight = ((pageSize.Height ?? DinA4H) * PicaPerMm).Round2();
+            var pageWidth = ((pageSize.Width ?? DinA4W) * PicaPerMm).Round2();
+            return (width: pageWidth, height: pageHeight);
+        }
+
         public int Save(string pdfFile, PdfOptions options, IConfig cfg = null,
             IFontManager fm = null, IEncodingPatcher enc = null)
         {
@@ -47,6 +56,7 @@ namespace Beycik.PDF
         private static PdfDocument Transform(IFontManager fonts, IEncodingPatcher enc,
             XmlDoc doc, IConfig config, PdfOptions options)
         {
+            var pageSize = GetPageSize(doc);
             var pdf = new PdfDocument(config, options);
 
             // TODO

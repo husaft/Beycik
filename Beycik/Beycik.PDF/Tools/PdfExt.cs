@@ -24,5 +24,7 @@ namespace Beycik.PDF.Tools
             var combined = $"{name}Encoding";
             return combined;
         }
+
+        public static double Round2(this double value) => Math.Round(value, 2);
     }
 }
