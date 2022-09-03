@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Beycik.PDF.Config;
 using Beycik.PDF.Refs;
+using Beycik.PDF.Text;
 
 namespace Beycik.PDF.Core
 {
@@ -47,6 +48,16 @@ namespace Beycik.PDF.Core
         public PdfPage CreatePage(int pageIdx, double width, double height)
         {
             return Catalog.Pages.CreatePage(pageIdx, width, height, this);
+        }
+
+        public string RegisterFont(string face, bool bold, bool italic, FontEncoding enc)
+        {
+            return Fonts.Register(face, bold, italic, enc);
+        }
+
+        public string RegisterImage(byte[] data, int width, int height, bool gray)
+        {
+            return Images.Register(data, width, height, gray);
         }
     }
 }

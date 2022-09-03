@@ -4,6 +4,7 @@ using Beycik.PDF.Config;
 using Beycik.PDF.Refs;
 using Beycik.PDF.Text;
 using static Beycik.PDF.Text.FontEncoding;
+using static Beycik.PDF.Tools.PdfConst;
 using static Beycik.PDF.Tools.PdfExt;
 
 namespace Beycik.PDF.Core
@@ -45,6 +46,41 @@ namespace Beycik.PDF.Core
                 if (font.Name.Equals(name, InvIgn) && font.Encoding == encoding)
                     return font.Id;
             return 0;
+        }
+
+        private static string GetPdfFontName(string faceName, bool bold, bool italic)
+        {
+            var pdfFace = Helvetica;
+            if (faceName.StartsWith(Courier))
+                pdfFace = Courier;
+            switch (bold)
+            {
+                case true when italic:
+                    pdfFace += $"-{BoldOblique}";
+                    break;
+                case true:
+                    pdfFace += $"-{Bold}";
+                    break;
+                default:
+                {
+                    if (italic)
+                        pdfFace += $"-{Oblique}";
+                    break;
+                }
+            }
+            return pdfFace;
+        }
+
+        public string Register(string faceName, bool bold, bool italic, FontEncoding enc)
+        {
+            var face = GetPdfFontName(faceName, bold, italic);
+            foreach (var item in _fonts)
+                if (item.Face.Equals(face) && item.Italic == italic && item.Encoding == enc)
+                    return item.Name;
+            var count = _fonts.Count + 1;
+            var font = new PdfFont(Config, face, $"F{count}", italic, enc);
+            _fonts.Add(font);
+            return font.Name;
         }
     }
 }

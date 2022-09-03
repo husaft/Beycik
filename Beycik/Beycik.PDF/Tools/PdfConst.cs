@@ -6,5 +6,14 @@
         internal const double DinA4W = 210.0;
 
         internal const double PicaPerMm = 2.83464567;
+
+        internal const string Helvetica = "Helvetica";
+        internal const string Courier = "Courier";
+
+        internal const string BoldOblique = Bold + Oblique;
+        internal const string Bold = "Bold";
+        internal const string Oblique = "Oblique";
+
+        internal const double StdFontSize = 10.0;
     }
 }

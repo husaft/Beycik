@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Beycik.PDF.Config;
 using Beycik.PDF.Refs;
 
@@ -38,11 +37,11 @@ namespace Beycik.PDF.Core
             return 0;
         }
 
-        public string Register(byte[] obj0, int obj1, int obj2, bool obj3)
+        public string Register(byte[] data, int width, int height, bool gray)
         {
             var count = _images.Count + 1;
             var imageName = $"I{count}";
-            _images.Add(new PdfImage(Config, obj0, obj1, obj2, imageName, obj3));
+            _images.Add(new PdfImage(Config, data, width, height, imageName, gray));
             return imageName;
         }
     }

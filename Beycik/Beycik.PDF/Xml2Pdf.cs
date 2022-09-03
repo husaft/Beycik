@@ -73,7 +73,13 @@ namespace Beycik.PDF
                     }
                 }
 
-            // TODO
+            foreach (var item in doc.Objects.Items)
+            {
+                var page = pages[item.Page];
+                var font = FontHandle.ApplyFrom(item);
+
+                // TODO
+            }
 
             return pdf;
         }

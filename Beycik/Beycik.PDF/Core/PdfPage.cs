@@ -3,6 +3,7 @@ using System.IO;
 using Beycik.PDF.Config;
 using Beycik.PDF.Refs;
 using Beycik.PDF.Tools;
+using static Beycik.PDF.Tools.PdfExt;
 
 namespace Beycik.PDF.Core
 {
@@ -17,10 +18,12 @@ namespace Beycik.PDF.Core
 
         private readonly List<string> _fontNames;
         private readonly List<string> _imageNames;
+        private readonly PdfDocument _doc;
 
         public PdfPage(IConfig config, int pageIdx,
-            double width, double height, PdfDocument _) : base(config)
+            double width, double height, PdfDocument doc) : base(config)
         {
+            _doc = doc;
             _fontNames = new List<string>();
             _imageNames = new List<string>();
             PageIdx = pageIdx;
@@ -71,6 +74,21 @@ namespace Beycik.PDF.Core
             id = base.ReNumber(id);
             id = Stream.ReNumber(id);
             return Annotations.ReNumber(id);
+        }
+
+        public void RegisterFont(string name)
+        {
+            foreach (var fontName in _fontNames)
+                if (fontName.Equals(name, InvIgn))
+                    return;
+            _fontNames.Add(name);
+        }
+
+        public string RegisterImage(byte[] data, int width, int height, bool gray)
+        {
+            var name = _doc.RegisterImage(data, width, height, gray);
+            _imageNames.Add(name);
+            return name;
         }
     }
 }

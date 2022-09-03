@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Text;
 using Beycik.PDF.Config;
 using Beycik.PDF.Refs;
 
