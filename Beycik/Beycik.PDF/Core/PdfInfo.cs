@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Beycik.PDF.Config;
+using Beycik.PDF.Refs;
 
 namespace Beycik.PDF.Core
 {

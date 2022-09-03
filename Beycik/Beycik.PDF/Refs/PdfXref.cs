@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Beycik.PDF.Config;
 using System.IO;
+using Beycik.PDF.Config;
 
-namespace Beycik.PDF.Core
+namespace Beycik.PDF.Refs
 {
     internal class PdfXref
     {

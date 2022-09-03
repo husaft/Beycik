@@ -4,9 +4,11 @@ namespace Beycik.PDF.Config
 {
     public class PdfConfig : IConfig
     {
+        public const string PdfEncoding = "ISO-8859-1";
+
         public PdfConfig(Encoding enc = null)
         {
-            Enc = enc ?? Encoding.GetEncoding("ISO-8859-1");
+            Enc = enc ?? Encoding.GetEncoding(PdfEncoding);
         }
 
         public Encoding Enc { get; }
