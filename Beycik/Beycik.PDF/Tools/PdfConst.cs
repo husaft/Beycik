@@ -6,6 +6,7 @@
         internal const double DinA4W = 210.0;
 
         internal const double PicaPerMm = 2.83464567;
+        internal const double PicaPerMmD = 2.84495D;
 
         internal const string Helvetica = "Helvetica";
         internal const string Courier = "Courier";

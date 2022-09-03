@@ -3,11 +3,14 @@ using Beycik.Draw;
 using Beycik.Model.Roots;
 using Beycik.PDF.Config;
 using Beycik.Draw.Fonts.API;
+using Beycik.Model.Objects;
 using Beycik.PDF.Core;
 using Beycik.PDF.Text;
 using Beycik.PDF.Visuals;
+using TextO = Beycik.Model.Objects.Text;
 using static Beycik.PDF.Tools.PdfConst;
 using static Beycik.PDF.Tools.PdfExt;
+using static Beycik.PDF.XmlRender;
 
 namespace Beycik.PDF
 {
@@ -76,10 +79,19 @@ namespace Beycik.PDF
             foreach (var item in doc.Objects.Items)
             {
                 var page = pages[item.Page];
-                var font = FontHandle.ApplyFrom(item);
-                var rect = PdfRect.ApplyFrom(item);
 
-                // TODO
+                var font = FontHandle.ApplyFrom(item);
+                var rect = PdfRect.ApplyFrom(item).Convert(pageHeight).Round();
+
+                switch (item)
+                {
+                    case Image im:
+                        Handle(rect, im, page, pdf, font);
+                        continue;
+                    case TextO te:
+                        Handle(fonts, te, page, pdf, rect, font);
+                        continue;
+                }
             }
 
             return pdf;
