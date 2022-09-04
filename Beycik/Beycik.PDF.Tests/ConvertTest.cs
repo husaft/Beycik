@@ -16,6 +16,12 @@ namespace Beycik.PDF.Tests
             => ShouldWrite(name, "part", "3", true, boPatch);
 
         [Theory]
+        [InlineData("0888_fr")]
+        [InlineData("0888_li")]
+        [InlineData("0888_re")]
+        [InlineData("0888_tc", 0.1)]
+        [InlineData("0888_td", 0.1)]
+        [InlineData("0888_tx")]
         [InlineData("3266_im")]
         public void ShouldWriteV3PartR(string name, double? boPatch = null)
             => ShouldWrite(name, "part", "3", false, boPatch);
@@ -26,7 +32,8 @@ namespace Beycik.PDF.Tests
             => ShouldWrite(name, "part", "4", true, boPatch);
 
         [Theory]
-        [InlineData("3491_te", 0.1)]
+        [InlineData("2454_co")]
+        [InlineData("3660_ho")]
         public void ShouldWriteV4PartR(string name, double? boPatch = null)
             => ShouldWrite(name, "part", "4", false, boPatch);
 
