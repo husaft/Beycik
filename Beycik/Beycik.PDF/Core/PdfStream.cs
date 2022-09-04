@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Beycik.PDF.Config;
 using Beycik.PDF.Refs;
 using Beycik.PDF.Text;
@@ -109,6 +110,127 @@ namespace Beycik.PDF.Core
             var line = $"{_color.Get()}BT /{font} {size.T()} Tf " +
                        $"{x.Round2().T()} {y.Round2().T()} Td ({ansi}) Tj ET\n";
             _lines.Add(line);
+        }
+
+        public void AddRect(PdfRect rect)
+        {
+            AddLine(rect.Left, rect.Top, rect.Right, rect.Top);
+            AddLine(rect.Right, rect.Top, rect.Right, rect.Bottom);
+            AddLine(rect.Right, rect.Bottom, rect.Left, rect.Bottom);
+            AddLine(rect.Left, rect.Bottom, rect.Left, rect.Top);
+        }
+
+        public void AddSolidRect(PdfRect rect)
+        {
+            MoveTo(rect.Left, rect.Top);
+            LineTo(rect.Right, rect.Top);
+            LineTo(rect.Right, rect.Bottom);
+            LineTo(rect.Left, rect.Bottom);
+            LineTo(rect.Left, rect.Top);
+            Fill();
+        }
+
+        private void LineTo(double x, double y)
+        {
+            var tmp = $" {_color.Get()}{x.Round2().T()} {y.Round2().T()} l\n";
+            _lines.Add(tmp);
+        }
+
+        private void MoveTo(double x, double y)
+        {
+            var tmp = $" {x.Round2().T()} {y.Round2().T()} m\n";
+            _lines.Add(tmp);
+        }
+
+        private void Fill()
+        {
+            _lines.Add(" f\n");
+        }
+
+        public void AddTriangle(PdfRect rect, char orient)
+        {
+            if (orient == 'r')
+            {
+                AddLine(rect.Left, rect.Top, rect.Left, rect.Bottom);
+                AddLine(rect.Left, rect.Top, rect.Right, rect.Top - rect.Height / 2.0);
+                AddLine(rect.Left, rect.Bottom, rect.Right, rect.Top - rect.Height / 2.0);
+                return;
+            }
+            if (orient == 'l')
+            {
+                AddLine(rect.Right, rect.Top, rect.Right, rect.Bottom);
+                AddLine(rect.Right, rect.Top, rect.Left, rect.Top - rect.Height / 2.0);
+                AddLine(rect.Right, rect.Bottom, rect.Left, rect.Top - rect.Height / 2.0);
+                return;
+            }
+            if (orient == 't')
+            {
+                AddLine(rect.Left, rect.Bottom, rect.Right, rect.Bottom);
+                AddLine(rect.Left, rect.Bottom, rect.Left + rect.Width / 2.0, rect.Top);
+                AddLine(rect.Right, rect.Bottom, rect.Left + rect.Width / 2.0, rect.Top);
+                return;
+            }
+            if (orient != 'b')
+                return;
+            AddLine(rect.Left, rect.Top, rect.Right, rect.Top);
+            AddLine(rect.Left, rect.Top, rect.Left + rect.Width / 2.0, rect.Bottom);
+            AddLine(rect.Right, rect.Top, rect.Left + rect.Width / 2.0, rect.Bottom);
+        }
+
+        public void AddSolidTriangle(PdfRect rect, char orient)
+        {
+            if (orient == 'r')
+            {
+                MoveTo(rect.Left, rect.Top);
+                LineTo(rect.Left, rect.Bottom);
+                LineTo(rect.Right, rect.Top - rect.Height / 2.0);
+                LineTo(rect.Left, rect.Top);
+                Fill();
+                return;
+            }
+            if (orient == 'l')
+            {
+                MoveTo(rect.Right, rect.Top);
+                LineTo(rect.Right, rect.Bottom);
+                LineTo(rect.Left, rect.Top - rect.Height / 2.0);
+                LineTo(rect.Right, rect.Top);
+                Fill();
+                return;
+            }
+            if (orient == 't')
+            {
+                MoveTo(rect.Left, rect.Bottom);
+                LineTo(rect.Right, rect.Bottom);
+                LineTo(rect.Left + rect.Width / 2.0, rect.Top);
+                LineTo(rect.Left, rect.Bottom);
+                Fill();
+                return;
+            }
+            if (orient != 'b')
+                return;
+            MoveTo(rect.Left, rect.Top);
+            LineTo(rect.Right, rect.Top);
+            LineTo(rect.Left + rect.Width / 2.0, rect.Bottom);
+            LineTo(rect.Left, rect.Top);
+            Fill();
+        }
+
+        public void AddCircle(PdfRect rect)
+            => AddCircle(rect.Left + rect.Width / 2.0, rect.Top - rect.Height / 2.0,
+                rect.Width / 2.0, rect.Height / 2.0, false);
+
+        public void AddSolidCircle(PdfRect rect)
+            => AddCircle(rect.Left + rect.Width / 2.0, rect.Top - rect.Height / 2.0,
+                rect.Width / 2.0, rect.Height / 2.0, true);
+
+        private void AddCircle(double a, double b, double c, double d, bool isSolid)
+        {
+            var str = $"{_color.Get()}{_lineMode.Get()}{a + c} {b} m\n" +
+                      $"{a + c} {b + d * 0.5} {a + c * 0.5} {b + d} {a} {b + d} c\n" +
+                      $"{a - c * 0.5} {b + d} {a - c} {b + d * 0.5} {a - c} {b} c\n" +
+                      $"{a - c} {b - d * 0.5} {a - c * 0.5} {b - d} {a} {b - d} c\n" +
+                      $"{a + c * 0.5} {b - d} {a + c} {b - d * 0.5} {a + c} {b} c";
+            _lines.Add(!isSolid ? $"{str} S\n" : $"{str} B\n");
         }
     }
 }

@@ -95,9 +95,63 @@ namespace Beycik.PDF
             page.Stream.AddLine(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
 
-        public static void Handle(Rectangle re)
+        public static void Handle(Rectangle myRect, PdfPage page, PdfRect rect)
         {
-            // TODO throw new NotImplementedException();
+            var red = myRect.Red ?? 0;
+            var green = myRect.Green ?? 0;
+            var blue = myRect.Blue ?? 0;
+            var shape = myRect.Shape ?? Shape.Rect;
+            var type = myRect.DrawType ?? DrawType.None;
+            var color = new Color(red, green, blue);
+            page.Stream.SetColor(color);
+
+            if (shape == Shape.Rect)
+            {
+                if (type == DrawType.Solid)
+                {
+                    var lineSize = myRect.LineSize ?? 0.0;
+                    page.Stream.SetLineMode(lineSize, 0.0, 0.0);
+                    page.Stream.AddSolidRect(rect);
+                    if (Math.Abs(0.0 - lineSize) > 0.001)
+                        page.Stream.AddRect(rect);
+                    return;
+                }
+                page.Stream.SetLineMode(myRect.LineSize ?? 1.0, 0.0, 0.0);
+                page.Stream.AddRect(rect);
+                return;
+            }
+
+            if (shape == Shape.Triangle)
+            {
+                var orient = myRect.Orientation ?? 'r';
+                if (type == DrawType.Solid)
+                {
+                    var lineSize = myRect.LineSize ?? 0.0;
+                    page.Stream.SetLineMode(lineSize, 0.0, 0.0);
+                    page.Stream.AddSolidTriangle(rect, orient);
+                    if (lineSize != 0.0)
+                        page.Stream.AddTriangle(rect, orient);
+                    return;
+                }
+                page.Stream.SetLineMode(myRect.LineSize ?? 1.0, 0.0, 0.0);
+                page.Stream.AddTriangle(rect, orient);
+                return;
+            }
+
+            if (shape == Shape.Circle)
+            {
+                if (type == DrawType.Solid)
+                {
+                    var lineSize = myRect.LineSize ?? 0.0;
+                    page.Stream.SetLineMode(lineSize, 0.0, 0.0);
+                    page.Stream.AddSolidCircle(rect);
+                    if (lineSize != 0.0)
+                        page.Stream.AddCircle(rect);
+                    return;
+                }
+                page.Stream.SetLineMode(myRect.LineSize ?? 1.0, 0.0, 0.0);
+                page.Stream.AddCircle(rect);
+            }
         }
     }
 }
