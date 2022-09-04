@@ -2,6 +2,7 @@
 using System.IO;
 using Beycik.PDF.Config;
 using Beycik.PDF.Refs;
+using Beycik.PDF.Text;
 using Beycik.PDF.Tools;
 using Beycik.PDF.Visuals;
 
@@ -10,12 +11,14 @@ namespace Beycik.PDF.Core
     internal sealed class PdfStream : PdfObject
     {
         private readonly PdfColor _color;
+        private readonly PdfLineMode _lineMode;
         private readonly List<string> _lines;
         private readonly PdfPage _page;
 
         public PdfStream(IConfig config, PdfPage page) : base(config)
         {
             _color = new PdfColor();
+            _lineMode = new PdfLineMode();
             _lines = new List<string>();
             _page = page;
         }
@@ -83,6 +86,29 @@ namespace Beycik.PDF.Core
         {
             var tmp = $"{a.T()} {b.T()} {c.T()} {d.T()} {e.T()} {f.T()} cm S\n";
             _lines.Add(tmp);
+        }
+
+        public void AddLine(double x1, double y1, double x2, double y2)
+        {
+            var tmp = $"{_color.Get()}{_lineMode.Get()}{x1.Round2().T()} " +
+                      $"{y1.Round2().T()} m {x2.Round2().T()} {y2.Round2().T()} l S\n";
+            _lines.Add(tmp);
+        }
+
+        public void SetLineMode(double width, double on, double off)
+        {
+            _lineMode.Set(width.Round2(), on, off);
+        }
+
+        public void AddText(double x, double y, string font,
+            double size, string text, IEncodingPatcher encoder)
+        {
+            var plain = PdfExt.CleanText(text);
+            var ansi = encoder.Translate(plain);
+            _page.RegisterFont(font);
+            var line = $"{_color.Get()}BT /{font} {size.T()} Tf " +
+                       $"{x.Round2().T()} {y.Round2().T()} Td ({ansi}) Tj ET\n";
+            _lines.Add(line);
         }
     }
 }

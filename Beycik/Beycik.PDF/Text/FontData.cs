@@ -25,7 +25,7 @@ namespace Beycik.PDF.Text
         {
             if (Font != null)
                 return;
-            Font = Create(Fonts, Family, Style, (int)(Size * FontFactor));
+            Font = Create(Fonts, Family, Style, (int)(RawSize * FontFactor));
             Metrics = Font.GetFontMetrics();
         }
 
@@ -46,6 +46,15 @@ namespace Beycik.PDF.Text
             {
                 LoadFont();
                 return Metrics.Height / FontFactor;
+            }
+        }
+
+        public double BaseOffset
+        {
+            get
+            {
+                LoadFont();
+                return (Metrics.Height - Metrics.Ascent) / FontFactor;
             }
         }
     }
