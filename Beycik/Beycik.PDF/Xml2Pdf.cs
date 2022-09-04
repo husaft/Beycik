@@ -97,7 +97,7 @@ namespace Beycik.PDF
                         Handle(tc);
                         continue;
                     case Line li:
-                        Handle(li);
+                        Handle(li, page, pageHeight);
                         continue;
                     case Rectangle re:
                         Handle(re);

@@ -80,9 +80,19 @@ namespace Beycik.PDF
             // TODO throw new NotImplementedException();
         }
 
-        public static void Handle(Line li)
+        public static void Handle(Line line, PdfPage page, double pageHeight)
         {
-            // TODO throw new NotImplementedException();
+            page.Stream.SetLineMode(line.LineSize ?? 1.0, 0.0, 0.0);
+            page.Stream.SetColor(Colors.Black);
+            var lineRed = line.Red ?? 0;
+            var lineGreen = line.Green ?? 0;
+            var lineBlue = line.Blue ?? 0;
+            var color = new Color(lineRed, lineGreen, lineBlue);
+            page.Stream.SetColor(color);
+            var rect = new PdfRect(Left: line.X ?? 0.0, Top: line.Y ?? 0.0,
+                    Right: line.X2 ?? 0.0, Bottom: line.Y2 ?? 0.0)
+                .Convert(pageHeight);
+            page.Stream.AddLine(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
 
         public static void Handle(Rectangle re)
