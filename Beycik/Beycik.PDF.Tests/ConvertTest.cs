@@ -21,7 +21,7 @@ namespace Beycik.PDF.Tests
         [InlineData("0888_re")]
         [InlineData("0888_tc", 0.1)]
         [InlineData("0888_td", 0.1)]
-        [InlineData("0888_tx")]
+        [InlineData("0888_tx", 0.7)]
         [InlineData("3266_im")]
         public void ShouldWriteV3PartR(string name, double? boPatch = null)
             => ShouldWrite(name, "part", "3", false, boPatch);
