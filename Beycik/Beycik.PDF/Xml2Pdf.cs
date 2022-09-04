@@ -17,10 +17,12 @@ namespace Beycik.PDF
     public sealed class Xml2Pdf : IDisposable
     {
         private readonly XmlDoc _doc;
+        private readonly TextMetrics _metrics;
 
         public Xml2Pdf(XmlDoc doc)
         {
             _doc = doc;
+            _metrics = new TextMetrics();
         }
 
         public void Dispose()
@@ -52,13 +54,13 @@ namespace Beycik.PDF
             var fonts = fm ?? Graphics.FontManager;
             var defEnc = enc ?? new DefaultEncPatcher();
 
-            var pdf = Transform(fonts, defEnc, _doc, config, options);
+            var pdf = Transform(fonts, defEnc, _doc, config, options, _metrics);
             var size = pdf.ExportToFile(pdfFile);
             return size;
         }
 
         private static PdfDocument Transform(IFontManager fonts, IEncodingPatcher enc,
-            XmlDoc doc, IConfig config, PdfOptions options)
+            XmlDoc doc, IConfig config, PdfOptions options, TextMetrics metrics)
         {
             var (pageWidth, pageHeight) = GetPageSize(doc);
             var pdf = new PdfDocument(config, options);
@@ -89,7 +91,7 @@ namespace Beycik.PDF
                         Handle(rect, im, page);
                         continue;
                     case TextO te:
-                        Handle(fonts, te, page, pdf, rect, font);
+                        Handle(fonts, te, page, pdf, rect, font, enc, metrics);
                         continue;
                 }
             }

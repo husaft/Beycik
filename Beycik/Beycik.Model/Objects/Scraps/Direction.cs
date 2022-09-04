@@ -4,10 +4,12 @@ namespace Beycik.Model.Objects.Scraps
     {
         None = 0,
 
-        Center,
+        Left = 1,
 
-        Right,
+        Right = 2,
 
-        Justify
+        Justify = 3,
+
+        Center = 4
     }
 }

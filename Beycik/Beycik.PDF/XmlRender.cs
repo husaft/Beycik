@@ -6,6 +6,7 @@ using Beycik.Model.Objects.Scraps;
 using Beycik.PDF.Core;
 using Beycik.PDF.Text;
 using Beycik.PDF.Visuals;
+using static Beycik.PDF.Text.TextRender;
 using TextO = Beycik.Model.Objects.Text;
 
 namespace Beycik.PDF
@@ -47,9 +48,31 @@ namespace Beycik.PDF
         }
 
         public static void Handle(IFontManager fonts, TextO text,
-            PdfPage page, PdfDocument pdf, PdfRect rect, FontHandle font)
+            PdfPage page, PdfDocument pdf, PdfRect r, FontHandle font,
+            IEncodingPatcher ec, TextMetrics metrics)
         {
-            throw new System.NotImplementedException();
+            var txt = text.Content;
+            var angle = text.Angle ?? 0.0;
+            var align = text.Align ?? Direction.Left;
+            var lineHeight = text.LineHeight ?? 1.0;
+
+            if (angle == 0.0)
+            {
+                RenderSimple(pdf, page, r, font, txt, align, lineHeight, fonts, ec, metrics);
+                return;
+            }
+
+            page.Stream.PushGraphicsState();
+            page.Stream.SetMatrix(0.0, 1.0, -1.0, 0.0, r.Right + r.Bottom, -r.Left + r.Bottom);
+            var top = r.Top - r.Height + r.Width;
+            var tr = r with
+            {
+                Top = top,
+                Bottom = top + r.Width,
+                Right = r.Left + r.Height,
+            };
+            RenderSimple(pdf, page, tr, font, txt, align, lineHeight, fonts, ec, metrics);
+            page.Stream.PopGraphicsState();
         }
     }
 }

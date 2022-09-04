@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Beycik.PDF.Config;
 using Beycik.PDF.Refs;
 using Beycik.PDF.Tools;
@@ -69,6 +66,23 @@ namespace Beycik.PDF.Core
                        $"/{imgName} Do\n" +
                        "s\nQ\n";
             _lines.Add(line);
+        }
+
+        public void PopGraphicsState()
+        {
+            _lines.Add(" Q\n");
+            _color.SetChanged();
+        }
+
+        public void PushGraphicsState()
+        {
+            _lines.Add(" q\n");
+        }
+
+        public void SetMatrix(double a, double b, double c, double d, double e, double f)
+        {
+            var tmp = $"{a.T()} {b.T()} {c.T()} {d.T()} {e.T()} {f.T()} cm S\n";
+            _lines.Add(tmp);
         }
     }
 }

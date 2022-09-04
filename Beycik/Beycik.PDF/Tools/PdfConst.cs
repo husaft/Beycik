@@ -16,5 +16,6 @@
         internal const string Oblique = "Oblique";
 
         internal const double StdFontSize = 10.0;
+        internal const double FontFactor = 10.0;
     }
 }
