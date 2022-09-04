@@ -10,7 +10,7 @@ namespace Beycik.PDF.Tests
 {
     public class ConvertTest
     {
-        [Theory]
+        // [Theory]
         [InlineData("3266_im")]
         public void ShouldWriteV3PartI(string name, double? boPatch = null)
             => ShouldWrite(name, "part", "3", true, boPatch);
@@ -20,7 +20,7 @@ namespace Beycik.PDF.Tests
         public void ShouldWriteV3PartR(string name, double? boPatch = null)
             => ShouldWrite(name, "part", "3", false, boPatch);
 
-        [Theory]
+        // [Theory]
         [InlineData("3491_te", 0.1)]
         public void ShouldWriteV4PartI(string name, double? boPatch = null)
             => ShouldWrite(name, "part", "4", true, boPatch);
