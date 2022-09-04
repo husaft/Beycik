@@ -93,6 +93,15 @@ namespace Beycik.PDF
                     case TextO te:
                         Handle(fonts, te, page, pdf, rect, font, enc, metrics);
                         continue;
+                    case TextCluster tc:
+                        Handle(tc);
+                        continue;
+                    case Line li:
+                        Handle(li);
+                        continue;
+                    case Rectangle re:
+                        Handle(re);
+                        continue;
                 }
             }
 

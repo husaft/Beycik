@@ -74,5 +74,20 @@ namespace Beycik.PDF
             RenderSimple(pdf, page, tr, font, txt, align, lineHeight, fonts, ec, metrics);
             page.Stream.PopGraphicsState();
         }
+
+        public static void Handle(TextCluster tc)
+        {
+            // TODO throw new NotImplementedException();
+        }
+
+        public static void Handle(Line li)
+        {
+            // TODO throw new NotImplementedException();
+        }
+
+        public static void Handle(Rectangle re)
+        {
+            // TODO throw new NotImplementedException();
+        }
     }
 }
