@@ -1,6 +1,6 @@
 ﻿namespace Beycik.PDF.Tools
 {
-    internal static class PdfConst
+    public static class PdfConst
     {
         internal const double DinA4H = 297.0;
         internal const double DinA4W = 210.0;
@@ -16,6 +16,6 @@
         internal const string Oblique = "Oblique";
 
         internal const double StdFontSize = 10.0;
-        internal const double FontFactor = 10.0;
+        public const double FontFactor = 10.0;
     }
 }

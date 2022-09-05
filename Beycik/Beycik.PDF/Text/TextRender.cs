@@ -75,10 +75,10 @@ namespace Beycik.PDF.Text
                     var baseOff = tfd.BaseOffset;
                     baseOff -= doc.Config.Quirks?.BaseOffsetFix?.Invoke() ?? 0;
                     var y = top + baseOff;
-                    page.Stream.AddText(x, y, name, tfd.RawSize, atom.Text, ec);
+                    page.Stream.AddText(x, y, name, tfd.Size, atom.Text, ec);
                     if (atom.Underline)
                     {
-                        page.Stream.SetLineMode(tfd.RawSize / 13.0, 0.0, 0.0);
+                        page.Stream.SetLineMode(tfd.Size / 13.0, 0.0, 0.0);
                         if (index < line.Atoms.Count - 1)
                             page.Stream.AddLine(x, top, x + atom.Width + atom.WsWidth, top);
                         else

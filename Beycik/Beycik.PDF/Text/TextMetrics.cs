@@ -20,6 +20,6 @@ namespace Beycik.PDF.Text
             return _currentFont;
         }
 
-        public double CalcWidth(string s) => _currentFont.GetWidth(s);
+        public double CalcWidth(string s) => _currentFont.GetCharWidth(s);
     }
 }
