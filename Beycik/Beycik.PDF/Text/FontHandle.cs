@@ -10,7 +10,7 @@ namespace Beycik.PDF.Text
         int Red, int Green, int Blue,
         bool Bold, bool Italic, bool Underline)
     {
-        public static FontHandle ApplyFrom(ObjectNode item)
+        public static FontHandle ApplyFrom(object item)
         {
             var styleObj = item as IStyleable;
             var face = styleObj?.FontFace ?? Helvetica;

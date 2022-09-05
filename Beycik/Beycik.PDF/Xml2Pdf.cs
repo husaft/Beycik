@@ -94,7 +94,7 @@ namespace Beycik.PDF
                         Handle(fonts, te, page, pdf, rect, font, enc, metrics);
                         continue;
                     case TextCluster tc:
-                        Handle(tc);
+                        Handle(tc, page, pdf, fonts, rect, enc, metrics);
                         continue;
                     case Line li:
                         Handle(li, page, pageHeight);

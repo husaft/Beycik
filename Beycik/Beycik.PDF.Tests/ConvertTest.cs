@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Xunit;
 using Beycik.Model;
@@ -12,33 +13,34 @@ namespace Beycik.PDF.Tests
     {
         // [Theory]
         [InlineData("3266_im")]
-        public void ShouldWriteV3PartI(string name, double? boPatch = null)
+        public void ShouldWriteV3PartI(string name, params double[] boPatch)
             => ShouldWrite(name, "part", "3", true, boPatch);
 
         [Theory]
         [InlineData("0888_fr")]
         [InlineData("0888_li")]
         [InlineData("0888_re")]
-        [InlineData("0888_tc", 0.1)]
-        [InlineData("0888_td", 0.1)]
+        [InlineData("0888_tc", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -8.45)]
+        [InlineData("0888_td", 1.0, 1.0, 1.0)]
         [InlineData("0888_tx", 0.7)]
         [InlineData("3266_im")]
-        public void ShouldWriteV3PartR(string name, double? boPatch = null)
+        public void ShouldWriteV3PartR(string name, params double[] boPatch)
             => ShouldWrite(name, "part", "3", false, boPatch);
 
         // [Theory]
         [InlineData("3491_te", 0.1)]
-        public void ShouldWriteV4PartI(string name, double? boPatch = null)
+        public void ShouldWriteV4PartI(string name, params double[] boPatch)
             => ShouldWrite(name, "part", "4", true, boPatch);
 
         [Theory]
         [InlineData("2454_co")]
         [InlineData("3660_ho")]
-        public void ShouldWriteV4PartR(string name, double? boPatch = null)
+        public void ShouldWriteV4PartR(string name, params double[] boPatch)
             => ShouldWrite(name, "part", "4", false, boPatch);
 
         private static void ShouldWrite(string name, string dir, string ver,
-            bool interactive, double? boPatch = null)
+            bool interactive, params double[] boPatch)
         {
             var origFile = GetResource($"{name}", $"v{ver}", dir);
             var otherDir = origFile.Replace(".PDF.Tests", ".Model.Tests");
@@ -55,7 +57,13 @@ namespace Beycik.PDF.Tests
             CreateFolderOf(dest);
 
             using var convertor = new Xml2Pdf(inputDoc);
-            convertor.Save(dest, options, GetStd(boPatch));
+            Func<double?> patcher = null;
+            if (boPatch.Length >= 1)
+            {
+                var idx = 0;
+                patcher = () => boPatch[idx++];
+            }
+            convertor.Save(dest, options, GetStd(patcher));
 
             var (a, b) = LoadLines(src, dest);
             Assert.Equal(a, b);

@@ -1,10 +1,11 @@
-﻿using Beycik.PDF.Config;
+﻿using System;
+using Beycik.PDF.Config;
 
 namespace Beycik.PDF.Tests
 {
     internal static class PestHelper
     {
-        internal static IConfig GetStd(double? boPatch)
+        internal static IConfig GetStd(Func<double?> boPatch)
             => new PdfConfig
             {
                 ProducerWeb = "http://www.fjd.de",

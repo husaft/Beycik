@@ -71,13 +71,15 @@ namespace Beycik.PDF.Core
             return pdfFace;
         }
 
+        private int _counter;
+
         public string Register(string faceName, bool bold, bool italic, FontEncoding enc)
         {
             var face = GetPdfFontName(faceName, bold, italic);
             foreach (var item in _fonts)
                 if (item.Face.Equals(face) && item.Italic == italic && item.Encoding == enc)
                     return item.Name;
-            var count = _fonts.Count + 1;
+            var count = ++_counter;
             var font = new PdfFont(Config, face, $"F{count}", italic, enc);
             _fonts.Add(font);
             return font.Name;

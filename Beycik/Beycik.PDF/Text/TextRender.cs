@@ -1,4 +1,5 @@
 ﻿using Beycik.Draw.Fonts.API;
+using Beycik.Model.Objects;
 using Beycik.Model.Objects.Scraps;
 using Beycik.PDF.Core;
 using Beycik.PDF.Visuals;
@@ -7,6 +8,16 @@ namespace Beycik.PDF.Text
 {
     internal static class TextRender
     {
+        public static void RenderClustered(PdfDocument doc, PdfPage page, PdfRect rect,
+            TextCluster tc, Direction mode, double height, IFontManager fonts,
+            IEncodingPatcher ec, TextMetrics metrics)
+        {
+            var atomizer = new TextAtomizer();
+            atomizer.AtomizeCluster(tc, metrics, fonts, ec);
+            atomizer.AssembleLine(rect.Width, height);
+            RenderAtomized(doc, page, rect, atomizer, mode, height, ec);
+        }
+
         public static void RenderSimple(PdfDocument doc, PdfPage page, PdfRect rect,
             FontHandle font, string text, Direction mode, double height,
             IFontManager fonts, IEncodingPatcher ec, TextMetrics metrics)
@@ -62,7 +73,7 @@ namespace Beycik.PDF.Text
                     var color = new Color(atom.Red, atom.Green, atom.Blue);
                     page.Stream.SetColor(color);
                     var baseOff = tfd.BaseOffset;
-                    baseOff -= doc.Config.Quirks?.BaseOffsetFix ?? 0;
+                    baseOff -= doc.Config.Quirks?.BaseOffsetFix?.Invoke() ?? 0;
                     var y = top + baseOff;
                     page.Stream.AddText(x, y, name, tfd.RawSize, atom.Text, ec);
                     if (atom.Underline)

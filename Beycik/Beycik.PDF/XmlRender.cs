@@ -75,9 +75,28 @@ namespace Beycik.PDF
             page.Stream.PopGraphicsState();
         }
 
-        public static void Handle(TextCluster tc)
+        public static void Handle(TextCluster tc, PdfPage page, PdfDocument pdf,
+            IFontManager fonts, PdfRect r, IEncodingPatcher texts, TextMetrics metrics)
         {
-            // TODO throw new NotImplementedException();
+            var angle = tc.Angle ?? 0.0;
+            var lineHeight = tc.LineHeight ?? 1.0;
+            var align = tc.Align ?? Direction.Left;
+            
+            if (angle == 0.0)
+            {
+                RenderClustered(pdf, page, r, tc, align, lineHeight, fonts, texts, metrics);
+                return;
+            }
+
+            page.Stream.PushGraphicsState();
+            page.Stream.SetMatrix(0.0, 1.0, -1.0, 0.0, r.Right + r.Bottom, -r.Left + r.Bottom);
+            var left = r.Left;
+            var top = r.Top - r.Height + r.Width;
+            var right = left + r.Height;
+            var bottom = top + r.Width;
+            var tcRect = new PdfRect(left, top, right, bottom);
+            RenderClustered(pdf, page, tcRect, tc, align, lineHeight, fonts, texts, metrics);
+            page.Stream.PopGraphicsState();
         }
 
         public static void Handle(Line line, PdfPage page, double pageHeight)

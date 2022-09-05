@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Beycik.Draw.Fonts.API;
+using Beycik.Model.Objects;
 using static Beycik.PDF.Tools.PdfExt;
 
 namespace Beycik.PDF.Text
@@ -153,6 +154,42 @@ namespace Beycik.PDF.Text
                     continue;
                 var index = _atoms.Count - 1;
                 _atoms[index].WsWidth = 0.0;
+            }
+        }
+
+        public void AtomizeCluster(TextCluster cluster, TextMetrics metrics,
+            IFontManager fonts, IEncodingPatcher encoder)
+        {
+            foreach (var item in cluster.Atoms)
+            {
+                var font = FontHandle.ApplyFrom(item);
+                var fontData = metrics.RegisterFont(font, fonts);
+                var text = item.Content;
+                if (encoder != null)
+                    text = encoder.Translate(text);
+                for (var lineIdx = 0; ParseEntry(text, lineIdx, "\n") is { } line; lineIdx++)
+                {
+                    if (lineIdx > 0)
+                    {
+                        var atom = new TextAtom(AtomType.LineBreak, fontData,
+                            font.Red, font.Green, font.Blue, font.Underline);
+                        _atoms.Add(atom);
+                    }
+                    for (var wordIdx = 0; ParseEntry(line, wordIdx, " ") is { } word; wordIdx++)
+                    {
+                        if (word.Equals("\r"))
+                            continue;
+                        var mwa = metrics.CalcWidth(word);
+                        var mwb = metrics.CalcWidth(" ");
+                        var atom = new TextAtom(word, AtomType.Text, fontData, mwa, mwb,
+                            font.Red, font.Green, font.Blue, font.Underline);
+                        _atoms.Add(atom);
+                    }
+                    if (_atoms.Count < 1)
+                        continue;
+                    var index = _atoms.Count - 1;
+                    _atoms[index].WsWidth = 0.0;
+                }
             }
         }
     }
