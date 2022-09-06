@@ -1,4 +1,6 @@
 ﻿using Beycik.Draw.Fonts.API;
+using Beycik.PDF.Tools;
+using Beycik.PDF.Visuals;
 using static Beycik.PDF.Tools.PdfConst;
 using FontStyle = Beycik.Draw.Fonts.API.FontStyle;
 
@@ -43,12 +45,23 @@ namespace Beycik.PDF.Text
             return retVal;
         }
 
-        public double Height => Metrics.Height / FontFactor;
+        public double Height => GetPreHeight() ?? Metrics.Height / FontFactor;
         public double BaseOffset => (Metrics.Height - Metrics.Ascent) / FontFactor;
         public double RealHeight => (Metrics.Ascent + Metrics.Descent) / FontFactor;
         public double UnscaledSize => Size;
         public double Ascent => Metrics.Ascent / FontFactor;
         public double Descent => Metrics.Descent / FontFactor;
         public int RealSize => (int)Size;
+
+        private bool UsePrecompiled => Family?.Equals(Helvetica) ?? false;
+
+        private double? GetPreHeight()
+        {
+            const int start = 5;
+            const int end = 20;
+            return UsePrecompiled && RealSize is >= start and <= end
+                ? Precompiled.LineHeight[Helvetica][RealSize]
+                : null;
+        }
     }
 }
