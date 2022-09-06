@@ -20,10 +20,9 @@ namespace Beycik.PDF.Tests
         [InlineData("0888_fr")]
         [InlineData("0888_li")]
         [InlineData("0888_re")]
-        [InlineData("0888_tc", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -8.45)]
-        [InlineData("0888_td", 1.0, 1.0, 1.0)]
-        [InlineData("0888_tx", 0.7)]
+        [InlineData("0888_tc", 0.1)]
+        [InlineData("0888_td", 0.1)]
+        [InlineData("0888_tx")]
         [InlineData("3266_im")]
         public void ShouldWriteV3PartR(string name, params double[] boPatch)
             => ShouldWrite(name, "part", "3", false, boPatch);
@@ -59,10 +58,7 @@ namespace Beycik.PDF.Tests
             using var convertor = new Xml2Pdf(inputDoc);
             Func<double?> patcher = null;
             if (boPatch.Length >= 1)
-            {
-                var idx = 0;
-                patcher = () => boPatch[idx++];
-            }
+                patcher = () => boPatch[0];
             convertor.Save(dest, options, GetStd(patcher));
 
             var (a, b) = LoadLines(src, dest);
