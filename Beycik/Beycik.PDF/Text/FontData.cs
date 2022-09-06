@@ -1,8 +1,7 @@
 ﻿using Beycik.Draw.Fonts.API;
-using Beycik.PDF.Tools;
-using Beycik.PDF.Visuals;
 using static Beycik.PDF.Tools.PdfConst;
-using FontStyle = Beycik.Draw.Fonts.API.FontStyle;
+using static Beycik.PDF.Visuals.Precompiled;
+using F = Beycik.Draw.Fonts.API.FontStyle;
 
 namespace Beycik.PDF.Text
 {
@@ -11,10 +10,10 @@ namespace Beycik.PDF.Text
     {
         public double GetCharWidth(string text)
         {
-            var num = 0.0;
+            var width = 0.0;
             foreach (var letter in text)
-                num += Metrics.CharWidth(letter) / FontFactor;
-            return num;
+                width += GetPreWidth(letter) ?? Metrics.CharWidth(letter) / FontFactor;
+            return width;
         }
 
         public double GetStringWidth(string txt) => Metrics.StringWidth(txt);
@@ -60,7 +59,19 @@ namespace Beycik.PDF.Text
             const int start = 5;
             const int end = 20;
             return UsePrecompiled && RealSize is >= start and <= end
-                ? Precompiled.LineHeight[Helvetica][RealSize]
+                ? LineHeight[Helvetica][RealSize]
+                : null;
+        }
+
+        private FontStyle FunStyle => Bold ? F.Bold : Italic ? F.Italic : F.Regular;
+
+        private double? GetPreWidth(char letter)
+        {
+            const int start = 5;
+            const int end = 15;
+            const int count = 256;
+            return UsePrecompiled && letter < count && RealSize is >= start and <= end
+                ? CharWidth[Helvetica][FunStyle][RealSize][letter]
                 : null;
         }
     }
