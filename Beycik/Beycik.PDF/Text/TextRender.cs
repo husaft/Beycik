@@ -18,6 +18,16 @@ namespace Beycik.PDF.Text
             RenderAtomized(doc, page, rect, atomizer, mode, height, ec);
         }
 
+        public static void RenderInside(PdfDocument doc, PdfPage page, PdfRect rect,
+            FontHandle font, string text, Direction mode, double height, IFontManager fonts,
+            IEncodingPatcher ec, TextMetrics metrics)
+        {
+            var atomizer = new TextAtomizer();
+            atomizer.Atomize(text, font, metrics, rect.Width, fonts, ec);
+            atomizer.AssembleLine(rect.Width, height);
+            RenderAtomized(doc, page, rect, atomizer, mode, height, ec);
+        }
+
         public static void RenderSimple(PdfDocument doc, PdfPage page, PdfRect rect,
             FontHandle font, string text, Direction mode, double height,
             IFontManager fonts, IEncodingPatcher ec, TextMetrics metrics)
@@ -27,7 +37,16 @@ namespace Beycik.PDF.Text
             atomizer.AssembleLine(rect.Width, height);
             RenderAtomized(doc, page, rect, atomizer, mode, height, ec);
         }
-
+        
+        public static double GetFontHeightForNull(FontHandle font, IFontManager fonts, 
+            IEncodingPatcher texts, TextMetrics metrics)
+        {
+            var atomizer = new TextAtomizer();
+            atomizer.Atomize(null, font, metrics, fonts, texts);
+            atomizer.AssembleLine(100.0, 1.0);
+            return atomizer.GetLine(0).LineHeight;
+        }
+        
         private static void RenderAtomized(PdfDocument doc, PdfPage page, PdfRect rect,
             TextAtomizer atomizer, Direction mode, double factor, IEncodingPatcher ec)
         {
