@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using Beycik.Draw.Fonts.API;
 using Beycik.Model.Objects;
 using static Beycik.PDF.Tools.PdfExt;
@@ -149,6 +150,57 @@ namespace Beycik.PDF.Text
                         metrics.CalcWidth(middle), metrics.CalcWidth(" "),
                         font.Red, font.Green, font.Blue, font.Underline);
                     _atoms.Add(textAtom);
+                }
+                if (_atoms.Count < 1)
+                    continue;
+                var index = _atoms.Count - 1;
+                _atoms[index].WsWidth = 0.0;
+            }
+        }
+
+        public void Atomize(string text, FontHandle font, TextMetrics metrics,
+            double maxWidth, IFontManager fonts, IEncodingPatcher encoder)
+        {
+            if (encoder != null)
+                text = encoder.Translate(text);
+            var fontData = metrics.RegisterFont(font, fonts);
+            for (var i = 0; ParseEntry(text, i, "\n") is { } src; ++i)
+            {
+                if (i > 0)
+                {
+                    var textAtom = new TextAtom(AtomType.LineBreak, fontData,
+                        font.Red, font.Green, font.Blue, font.Underline);
+                    _atoms.Add(textAtom);
+                }
+                for (var j = 0; ParseEntry(src, j, " ") is { } middle; ++j)
+                {
+                    if (middle.Equals("\r"))
+                        continue;
+                    var width = metrics.CalcWidth(middle);
+                    if (width > maxWidth)
+                    {
+                        int length;
+                        int start;
+                        for (length = 0, start = 0; length < middle.Length; ++length)
+                        {
+                            var tmp = middle.Substring(start, length + 1);
+                            if (!(metrics.CalcWidth(tmp) > maxWidth))
+                                continue;
+                            if (length > start)
+                                length += -1;
+                            tmp = middle.Substring(start, length + 1);
+                            var textAtom = new TextAtom(tmp, AtomType.Text, fontData,
+                                metrics.CalcWidth(tmp), metrics.CalcWidth(" "),
+                                font.Red, font.Green, font.Blue, font.Underline);
+                            _atoms.Add(textAtom);
+                            length = start = length + 1;
+                        }
+                        middle = middle.Substring(start, length);
+                        width = metrics.CalcWidth(middle);
+                    }
+                    var atom = new TextAtom(middle, AtomType.Text, fontData, width,
+                        metrics.CalcWidth(" "), font.Red, font.Green, font.Blue, font.Underline);
+                    _atoms.Add(atom);
                 }
                 if (_atoms.Count < 1)
                     continue;
