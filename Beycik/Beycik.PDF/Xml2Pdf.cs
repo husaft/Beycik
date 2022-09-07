@@ -118,7 +118,7 @@ namespace Beycik.PDF
                         Handle(io);
                         continue;
                     case TextArea ta:
-                        Handle(ta);
+                        Handle(ta, page, rect, font, fonts, enc, pdf, metrics);
                         continue;
                     case Container co:
                         Handle(co);

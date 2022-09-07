@@ -219,9 +219,38 @@ namespace Beycik.PDF
             // NO-OP
         }
 
-        public static void Handle(TextArea _)
+        public static void Handle(TextArea ta, PdfPage page, PdfRect r, FontHandle rawFont,
+            IFontManager fonts, IEncodingPatcher enc, PdfDocument pdf, TextMetrics metrics)
         {
-            // NO-OP
+            var font = FontHandle.CopyFrom(rawFont);
+            var lineHeight = ta.LineHeight ?? 0.85;
+
+            if (!string.IsNullOrEmpty(ta.Content))
+                RenderInside(pdf, page, r, font, ta.Content, Direction.Left, lineHeight, fonts, enc, metrics);
+
+            var lineSize = ta.LineSize ?? 0.0;
+            if (lineSize != 0.0)
+            {
+                page.Stream.SetLineMode(lineSize, 0.0, 0.0);
+                page.Stream.SetColor(Colors.Black);
+
+                var heightNull = GetFontHeightForNull(font, fonts, enc, metrics);
+                for (double y = r.Top - heightNull - 0.5 * lineSize,
+                     count = 1 + (int)(r.Height / (heightNull * lineHeight));
+                     y > r.Bottom;
+                     y -= heightNull * lineHeight)
+                {
+                    var tmp = count;
+                    count += -1;
+                    if (tmp >= 0)
+                    {
+                        page.Stream.AddLine(r.Left + 0.5 * lineSize, y,
+                            r.Right - 0.5 * lineSize, y);
+                        continue;
+                    }
+                    break;
+                }
+            }
         }
 
         public static void Handle(Container _)
