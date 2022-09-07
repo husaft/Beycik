@@ -102,6 +102,30 @@ namespace Beycik.PDF
                     case Rectangle re:
                         Handle(re, page, rect);
                         continue;
+                    case CheckBox cb:
+                        Handle(cb, options, page, rect);
+                        continue;
+                    case Frame fr:
+                        Handle(fr);
+                        continue;
+                    case TextField tf:
+                        Handle(tf);
+                        continue;
+                    case DropDown dd:
+                        Handle(dd, page, rect, pdf, font, enc, metrics, fonts);
+                        continue;
+                    case Info io:
+                        Handle(io);
+                        continue;
+                    case TextArea ta:
+                        Handle(ta);
+                        continue;
+                    case Container co:
+                        Handle(co);
+                        continue;
+                    case HotSpot ho:
+                        Handle(ho);
+                        continue;
                 }
             }
 

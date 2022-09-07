@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using Beycik.Draw;
 using Beycik.Draw.Fonts.API;
 using Beycik.Model.Objects;
 using Beycik.Model.Objects.Scraps;
+using Beycik.PDF.Config;
 using Beycik.PDF.Core;
 using Beycik.PDF.Text;
 using Beycik.PDF.Visuals;
@@ -81,7 +83,7 @@ namespace Beycik.PDF
             var angle = tc.Angle ?? 0.0;
             var lineHeight = tc.LineHeight ?? 1.0;
             var align = tc.Align ?? Direction.Left;
-            
+
             if (angle == 0.0)
             {
                 RenderClustered(pdf, page, r, tc, align, lineHeight, fonts, texts, metrics);
@@ -171,6 +173,65 @@ namespace Beycik.PDF
                 page.Stream.SetLineMode(myRect.LineSize ?? 1.0, 0.0, 0.0);
                 page.Stream.AddCircle(rect);
             }
+        }
+
+        public static void Handle(CheckBox cb, PdfOptions options, PdfPage page, PdfRect r)
+        {
+            var cbShape = !options.AllCheckBoxRect ? cb.Shape ?? Shape.Rect : Shape.Rect;
+            page.Stream.SetLineMode(1.0, 0.0, 0.0);
+            page.Stream.SetColor(Colors.Black);
+            if (cb.PrintBorder ?? true)
+            {
+                if (cbShape == Shape.Circle)
+                    page.Stream.AddCircle(r);
+                else
+                    page.Stream.AddRect(r);
+            }
+            if (cb.Content != "0")
+            {
+                page.Stream.SetLineMode(2.0, 0.0, 0.0);
+                page.Stream.AddLine(r.Left + 2.0, r.Top - 2.0, r.Right - 2.0, r.Bottom + 2.0);
+                page.Stream.AddLine(r.Left + 2.0, r.Bottom + 2.0, r.Right - 2.0, r.Top - 2.0);
+            }
+        }
+
+        public static void Handle(DropDown dd, PdfPage page, PdfRect rect, PdfDocument pdf,
+            FontHandle font, IEncodingPatcher ec, TextMetrics metrics, IFontManager fonts)
+        {
+            const Direction mode = Direction.Left;
+            var text = $"{dd.Options.First().Map ?? dd.Value} ";
+            const double height = 1.0;
+            RenderSimple(pdf, page, rect, font, text, mode, height, fonts, ec, metrics);
+        }
+
+        public static void Handle(Frame _)
+        {
+            // NO-OP
+        }
+
+        public static void Handle(TextField _)
+        {
+            // NO-OP
+        }
+
+        public static void Handle(Info _)
+        {
+            // NO-OP
+        }
+
+        public static void Handle(TextArea _)
+        {
+            // NO-OP
+        }
+
+        public static void Handle(Container _)
+        {
+            // NO-OP
+        }
+
+        public static void Handle(HotSpot _)
+        {
+            // NO-OP
         }
     }
 }
