@@ -40,8 +40,8 @@ namespace Beycik.PDF
         private static (double width, double height) GetPageSize(XmlDoc doc)
         {
             var pageSize = doc.FormInfo.PageSize;
-            var pageHeight = ((pageSize.Height ?? DinA4H) * PicaPerMm).Round2();
-            var pageWidth = ((pageSize.Width ?? DinA4W) * PicaPerMm).Round2();
+            var pageHeight = ((pageSize?.Height ?? DinA4H) * PicaPerMm).Round2();
+            var pageWidth = ((pageSize?.Width ?? DinA4W) * PicaPerMm).Round2();
             return (width: pageWidth, height: pageHeight);
         }
 
