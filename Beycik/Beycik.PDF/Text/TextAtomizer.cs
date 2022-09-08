@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using Beycik.Draw.Fonts.API;
 using Beycik.Model.Objects;
 using static Beycik.PDF.Tools.PdfExt;
