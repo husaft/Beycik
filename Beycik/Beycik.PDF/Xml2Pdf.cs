@@ -112,7 +112,7 @@ namespace Beycik.PDF
                         Handle(tf);
                         continue;
                     case DropDown dd:
-                        Handle(dd, page, rect, pdf, font, enc, metrics, fonts);
+                        Handle(dd, page, rect, pdf, font, enc, metrics, fonts, options);
                         continue;
                     case Info io:
                         Handle(io);

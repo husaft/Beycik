@@ -6,6 +6,7 @@
         {
             return new PdfOptions
             {
+                PrintOnly = false,
                 GenerateJavascriptForGlobals = true,
                 GenerateJavascriptForCheckboxes = true,
                 GenerateJavascriptForOpen = true,
@@ -18,6 +19,7 @@
         {
             return new PdfOptions
             {
+                PrintOnly = true,
                 GenerateJavascriptForGlobals = false,
                 GenerateJavascriptForCheckboxes = false,
                 GenerateJavascriptForOpen = false,
