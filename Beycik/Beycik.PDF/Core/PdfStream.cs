@@ -54,14 +54,10 @@ namespace Beycik.PDF.Core
             var imgName = _page.RegisterImage(data, width, height, gray);
             var xT = rect.Right - rect.Left;
             var x = xT / width;
-            var xS = x.T();
-            var y1T = rect.Top - rect.Bottom;
-            var y1 = y1T / height;
-            var y1S = y1.T();
-            var y2T = (decimal)rect.Top - (decimal)rect.Bottom;
-            var y2 = decimal.Divide(y2T, height);
-            var y2S = y2.T();
-            var yS = y1S.Length == 19 ? y1S : y2S;
+            var xS = x.T("N16");
+            var yT = rect.Top - rect.Bottom;
+            var y = yT / height;
+            var yS = y.T("N16");
             var line = $"q\n1 0 0 1 {rect.Left.Round2().T()} " +
                        $"{rect.Bottom.Round2().T()} cm\n" +
                        $"{xS} 0 0 {yS} 0 0 cm\n" +

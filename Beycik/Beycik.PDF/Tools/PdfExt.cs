@@ -34,15 +34,17 @@ namespace Beycik.PDF.Tools
 
         public static double Round2(this double value) => Math.Round(value, 2);
 
-        public static string T(this double value)
+        public static string T(this double value, string format = null)
         {
-            var txt = value.ToString(Inv);
+            var txt = format == null
+                ? value.ToString(Inv)
+                : value.ToString(format, Inv);
             return txt.Contains('.') ? txt : $"{txt}.0";
         }
 
-        public static string T(this decimal value)
+        public static string T(this decimal value, string format = "N17")
         {
-            var txt = value.ToString("N17", Inv);
+            var txt = value.ToString(format, Inv);
             return txt.Contains('.') ? txt : $"{txt}.0";
         }
 
