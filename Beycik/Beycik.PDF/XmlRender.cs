@@ -196,10 +196,16 @@ namespace Beycik.PDF
         }
 
         public static void Handle(DropDown dd, PdfPage page, PdfRect rect, PdfDocument pdf,
-            FontHandle font, IEncodingPatcher ec, TextMetrics metrics, IFontManager fonts)
+            FontHandle font, IEncodingPatcher ec, TextMetrics metrics, IFontManager fonts,
+            PdfOptions options)
         {
+            var first = dd.Options.FirstOrDefault();
+            if (options.PrintOnly &&
+                string.IsNullOrEmpty(dd.Value) &&
+                first?.Map == null)
+                return;
             const Direction mode = Direction.Left;
-            var text = $"{dd.Options.First().Map ?? dd.Value} ";
+            var text = dd.Value ?? $"{first?.Map} ";
             const double height = 1.0;
             RenderSimple(pdf, page, rect, font, text, mode, height, fonts, ec, metrics);
         }
