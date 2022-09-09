@@ -12,11 +12,6 @@ namespace Beycik.PDF.Tests
 {
     public class ConvertTest
     {
-        // [Theory]
-        [InlineData("3266_im")]
-        public void ShouldWriteV3PartI(string name, params string[] boPatch)
-            => ShouldWrite(name, "part", "3", true, boPatch);
-
         [Theory]
         [InlineData("0888_fr")]
         [InlineData("0888_li")]
@@ -35,15 +30,11 @@ namespace Beycik.PDF.Tests
         public void ShouldWriteV3PartR(string name, params string[] boPatch)
             => ShouldWrite(name, "part", "3", false, boPatch);
 
-        // [Theory]
-        [InlineData("3491_te", "0:0.1")]
-        public void ShouldWriteV4PartI(string name, params string[] boPatch)
-            => ShouldWrite(name, "part", "4", true, boPatch);
-
         [Theory]
         [InlineData("2454_co")]
         [InlineData("3660_ho")]
         [InlineData("0443_ua")]
+        [InlineData("3491_te", "0:0.1")]
         [InlineData("2845_ub", "0:0.1")]
         [InlineData("4531_uc", "0:0.1")]
         [InlineData("4627_ud", "2:-0.01", "3:-0.01")]
