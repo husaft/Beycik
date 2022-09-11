@@ -220,11 +220,11 @@ namespace Beycik.PDF.Core
 
         private void AddCircle(double a, double b, double c, double d, bool isSolid)
         {
-            var str = $"{_color.Get()}{_lineMode.Get()}{a + c} {b} m\n" +
-                      $"{a + c} {b + d * 0.5} {a + c * 0.5} {b + d} {a} {b + d} c\n" +
-                      $"{a - c * 0.5} {b + d} {a - c} {b + d * 0.5} {a - c} {b} c\n" +
-                      $"{a - c} {b - d * 0.5} {a - c * 0.5} {b - d} {a} {b - d} c\n" +
-                      $"{a + c * 0.5} {b - d} {a + c} {b - d * 0.5} {a + c} {b} c";
+            var str = $"{_color.Get()}{_lineMode.Get()}{(a + c).T()} {b.T()} m\n" +
+                      $"{(a + c).T()} {(b + d * 0.5).T()} {(a + c * 0.5).T()} {(b + d).T()} {a.T()} {(b + d).T()} c\n" +
+                      $"{(a - c * 0.5).T()} {(b + d).T()} {(a - c).T()} {(b + d * 0.5).T()} {(a - c).T()} {b.T()} c\n" +
+                      $"{(a - c).T()} {(b - d * 0.5).T()} {(a - c * 0.5).T()} {(b - d).T()} {a.T()} {(b - d).T()} c\n" +
+                      $"{(a + c * 0.5).T()} {(b - d).T()} {(a + c).T()} {(b - d * 0.5).T()} {(a + c).T()} {b.T()} c";
             _lines.Add(!isSolid ? $"{str} S\n" : $"{str} B\n");
         }
     }
