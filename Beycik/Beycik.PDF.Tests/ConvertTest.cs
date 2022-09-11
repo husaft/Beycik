@@ -14,6 +14,7 @@ namespace Beycik.PDF.Tests
     {
         [Theory]
         [InlineData("2309")]
+        [InlineData("2317")]
         public void ShouldWriteV3FullR(string name, params string[] boPatch)
             => ShouldWrite(name, "full", "3", false, boPatch);
 
@@ -39,6 +40,7 @@ namespace Beycik.PDF.Tests
 
         [Theory]
         [InlineData("4529")]
+        [InlineData("3252")]
         public void ShouldWriteV4FullR(string name, params string[] boPatch)
             => ShouldWrite(name, "full", "4", false, boPatch);
 
