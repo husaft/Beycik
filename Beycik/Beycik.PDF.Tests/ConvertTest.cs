@@ -13,6 +13,11 @@ namespace Beycik.PDF.Tests
     public class ConvertTest
     {
         [Theory]
+        [InlineData("2309")]
+        public void ShouldWriteV3FullR(string name, params string[] boPatch)
+            => ShouldWrite(name, "full", "3", false, boPatch);
+
+        [Theory]
         [InlineData("0888_fr")]
         [InlineData("0888_li")]
         [InlineData("0888_re")]
@@ -30,6 +35,11 @@ namespace Beycik.PDF.Tests
             "14:0.1", "15:0.1", "16:0.1", "17:0.1", "18:0.1", "19:0.1")]
         public void ShouldWriteV3PartR(string name, params string[] boPatch)
             => ShouldWrite(name, "part", "3", false, boPatch);
+
+        [Theory]
+        [InlineData("4529")]
+        public void ShouldWriteV4FullR(string name, params string[] boPatch)
+            => ShouldWrite(name, "full", "4", false, boPatch);
 
         [Theory]
         [InlineData("2454_co")]

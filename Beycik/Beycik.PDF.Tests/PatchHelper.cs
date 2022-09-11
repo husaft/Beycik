@@ -37,7 +37,14 @@ namespace Beycik.PDF.Tests
                                           && char.IsDigit(d.diff[0].before)
                                           && char.IsDigit(d.diff[0].after)
                                           && char.IsDigit(d.diff[1].before)
-                                          && char.IsDigit(d.diff[1].after)));
+                                          && char.IsDigit(d.diff[1].after)) ||
+                                         (d.diff.Length == 3
+                                          && char.IsDigit(d.diff[0].before)
+                                          && char.IsDigit(d.diff[0].after)
+                                          && char.IsDigit(d.diff[1].before)
+                                          && char.IsDigit(d.diff[1].after)
+                                          && char.IsDigit(d.diff[2].before)
+                                          && char.IsDigit(d.diff[2].after)));
                 if (match.diff == null)
                     continue;
                 var replace = delLines[match.idx];
