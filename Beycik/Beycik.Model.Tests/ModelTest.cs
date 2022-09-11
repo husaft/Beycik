@@ -69,6 +69,7 @@ namespace Beycik.Model.Tests
         [InlineData("0888_td")]
         [InlineData("0888_tf")]
         [InlineData("0888_tx")]
+        [InlineData("1666_tj")]
         [InlineData("3001_ta")]
         [InlineData("2900_dd")]
         [InlineData("2900_in")]

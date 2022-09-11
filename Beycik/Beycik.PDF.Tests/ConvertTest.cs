@@ -19,6 +19,7 @@ namespace Beycik.PDF.Tests
         [InlineData("0888_tc", "0:0.1")]
         [InlineData("0888_td", "0:0.1")]
         [InlineData("0888_tx")]
+        [InlineData("1666_tj", "0:0.1")]
         [InlineData("3266_im")]
         [InlineData("0888_cb")]
         [InlineData("0888_tf")]

@@ -91,9 +91,7 @@ namespace Beycik.PDF.Text
                     var name = doc.RegisterFont(tfd.Family, tfd.Bold, tfd.Italic, FontEncoding.WinAnsi);
                     var color = new Color(atom.Red, atom.Green, atom.Blue);
                     page.Stream.SetColor(color);
-                    var baseOff = tfd.BaseOffset;
-                    baseOff -= doc.Config.Quirks?.BaseOffsetFix?.Invoke() ?? 0;
-                    var y = top + baseOff;
+                    var y = top + GetBaseOffset(tfd, doc);
                     page.Stream.AddText(x, y, name, tfd.Size, atom.Text, ec);
                     if (atom.Underline)
                     {
@@ -106,6 +104,14 @@ namespace Beycik.PDF.Text
                     x = x + atom.Width + atom.WsWidth;
                 }
             }
+        }
+
+        private static double GetBaseOffset(FontData data, PdfDocument doc)
+        {
+            var baseOff = data.BaseOffset;
+            var fix = doc.Config.Quirks?.BaseOffsetFix;
+            if (fix != null) baseOff -= fix.Invoke() ?? 0;
+            return baseOff;
         }
     }
 }
