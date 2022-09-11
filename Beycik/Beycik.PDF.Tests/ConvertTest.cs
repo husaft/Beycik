@@ -73,7 +73,11 @@ namespace Beycik.PDF.Tests
                     map.TryGetValue(idx++, out val) ? val :
                     0;
             }
-            convertor.Save(dest, options, GetStd(patcher));
+            var config = GetStd(patcher);
+            convertor.Save(dest, options, config);
+
+            if (!name.Contains('_'))
+                PatchHelper.FixMinorIssues(src, dest, config.Enc);
 
             var (a, b) = LoadLines(src, dest);
             Assert.Equal(a, b);
