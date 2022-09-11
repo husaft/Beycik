@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -28,8 +29,15 @@ namespace Beycik.PDF.Tests
             {
                 var inserted = insLines[i];
                 var match = delLines.Select((d, j) => (idx: j,
-                        diff: GetDiff(d, d.Length == inserted.Length ? inserted : null)))
-                    .FirstOrDefault(d => d.diff.Count() == 1);
+                        diff: GetDiff(d, d.Length == inserted.Length ? inserted : null).ToArray()))
+                    .FirstOrDefault(d => (d.diff.Length == 1
+                                          && char.IsDigit(d.diff[0].before)
+                                          && char.IsDigit(d.diff[0].after)) ||
+                                         (d.diff.Length == 2
+                                          && char.IsDigit(d.diff[0].before)
+                                          && char.IsDigit(d.diff[0].after)
+                                          && char.IsDigit(d.diff[1].before)
+                                          && char.IsDigit(d.diff[1].after)));
                 if (match.diff == null)
                     continue;
                 var replace = delLines[match.idx];
