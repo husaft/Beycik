@@ -37,8 +37,8 @@ namespace Beycik.PDF.Text
             atomizer.AssembleLine(rect.Width, height);
             RenderAtomized(doc, page, rect, atomizer, mode, height, ec);
         }
-        
-        public static double GetFontHeightForNull(FontHandle font, IFontManager fonts, 
+
+        public static double GetFontHeightForNull(FontHandle font, IFontManager fonts,
             IEncodingPatcher texts, TextMetrics metrics)
         {
             var atomizer = new TextAtomizer();
@@ -46,7 +46,7 @@ namespace Beycik.PDF.Text
             atomizer.AssembleLine(100.0, 1.0);
             return atomizer.GetLine(0).LineHeight;
         }
-        
+
         private static void RenderAtomized(PdfDocument doc, PdfPage page, PdfRect rect,
             TextAtomizer atomizer, Direction mode, double factor, IEncodingPatcher ec)
         {
@@ -64,17 +64,129 @@ namespace Beycik.PDF.Text
                         RenderAtomizedLeft(rect, line, page, top, doc, ec);
                         break;
                     case Direction.Right:
-                        // TODO Two
+                        RenderAtomizedRight(doc, page, rect, ec, line, top);
                         break;
                     case Direction.Justify:
-                        // TODO Three
+                        RenderAtomizedJustify(doc, page, rect, atomizer, ec, line, i, top);
                         break;
                     case Direction.Center:
-                        // TODO Four
+                        RenderAtomizedCenter(doc, page, rect, ec, line, top);
                         break;
                 }
                 if (top < rect.Bottom)
                     break;
+            }
+        }
+
+        private static void RenderAtomizedCenter(PdfDocument doc, PdfPage page, PdfRect rect,
+            IEncodingPatcher ec, TextLine line, double top)
+        {
+            var x = rect.Left + (rect.Width - line.Width) / 2.0;
+            for (var i = 0; i < line.Atoms.Count; ++i)
+            {
+                var atom = line.Atoms[i];
+                if (atom.Type != AtomType.Text)
+                    continue;
+                var font = doc.RegisterFont(atom.FontData.Family, atom.FontData.Bold,
+                    atom.FontData.Italic, FontEncoding.WinAnsi);
+                var color = new Color(atom.Red, atom.Green, atom.Blue);
+                page.Stream.SetColor(color);
+                var y = top + GetBaseOffset(atom.FontData, doc);
+                page.Stream.AddText(x, y, font, atom.FontData.Size, atom.Text, ec);
+                if (atom.Underline)
+                {
+                    page.Stream.SetLineMode(atom.FontData.Size / 13.0, 0.0, 0.0);
+                    if (i < line.Atoms.Count - 1)
+                        page.Stream.AddLine(x, top, x + atom.Width + atom.WsWidth, top);
+                    else
+                        page.Stream.AddLine(x, top, x + atom.Width, top);
+                }
+                x = x + atom.Width + atom.WsWidth;
+            }
+        }
+
+        private static void RenderAtomizedJustify(PdfDocument doc, PdfPage page, PdfRect rect,
+            TextAtomizer atomizer, IEncodingPatcher ec, TextLine line, int lineCtr, double top)
+        {
+            var count = line.Atoms.Count;
+            if (count <= 0)
+                return;
+            if (line.Atoms[count - 1].Type == AtomType.LineBreak || count < 2 ||
+                lineCtr == atomizer.LineSigma - 1 || line.Mode == LineType.HardBreak)
+            {
+                var x = rect.Left;
+                for (var i = 0; i < line.Atoms.Count; ++i)
+                {
+                    var atom = line.Atoms[i];
+                    if (atom.Type != AtomType.Text)
+                        continue;
+                    var font = doc.RegisterFont(atom.FontData.Family, atom.FontData.Bold,
+                        atom.FontData.Italic, FontEncoding.WinAnsi);
+                    var color = new Color(atom.Red, atom.Green, atom.Blue);
+                    page.Stream.SetColor(color);
+                    var y = top + GetBaseOffset(atom.FontData, doc);
+                    page.Stream.AddText(x, y, font, atom.FontData.Size, atom.Text, ec);
+                    if (atom.Underline)
+                    {
+                        page.Stream.SetLineMode(atom.FontData.Size / 13.0, 0.0, 0.0);
+                        if (i < line.Atoms.Count - 1)
+                            page.Stream.AddLine(x, top,
+                                x + atom.Width + atom.WsWidth, top);
+                        else
+                            page.Stream.AddLine(x, top, x + atom.Width, top);
+                    }
+                    x = x + atom.Width + atom.WsWidth;
+                }
+                return;
+            }
+            var push = (rect.Width - line.Width) / (count - 1);
+            var left = rect.Left;
+            for (var index = 0; index < count; ++index)
+            {
+                var atom = line.Atoms[index];
+                var font = doc.RegisterFont(atom.FontData.Family, atom.FontData.Bold,
+                    atom.FontData.Italic, FontEncoding.WinAnsi);
+                var color = new Color(atom.Red, atom.Green, atom.Blue);
+                page.Stream.SetColor(color);
+                var y = top + GetBaseOffset(atom.FontData, doc);
+                page.Stream.AddText(left, y, font, atom.FontData.Size, atom.Text, ec);
+                if (atom.Underline)
+                {
+                    page.Stream.SetLineMode(atom.FontData.Size / 13.0, 0.0, 0.0);
+                    if (index < line.Atoms.Count - 1)
+                        page.Stream.AddLine(left, top,
+                            left + atom.Width + atom.WsWidth + push, top);
+                    else
+                        page.Stream.AddLine(left, top, left + atom.Width, top);
+                }
+                left += atom.Width + atom.WsWidth + push;
+            }
+        }
+
+        private static void RenderAtomizedRight(PdfDocument doc, PdfPage page, PdfRect rect,
+            IEncodingPatcher ec, TextLine line, double top)
+        {
+            var x = rect.Right - line.Width;
+            for (var i = 0; i < line.Atoms.Count; ++i)
+            {
+                var atom = line.Atoms[i];
+                if (atom.Type != AtomType.Text)
+                    continue;
+                var font = doc.RegisterFont(atom.FontData.Family, atom.FontData.Bold,
+                    atom.FontData.Italic, FontEncoding.WinAnsi);
+                var color = new Color(atom.Red, atom.Green, atom.Blue);
+                page.Stream.SetColor(color);
+                var y = top + GetBaseOffset(atom.FontData, doc);
+                page.Stream.AddText(x, y, font, atom.FontData.Size, atom.Text, ec);
+                if (atom.Underline)
+                {
+                    page.Stream.SetLineMode(atom.FontData.Size / 13.0, 0.0, 0.0);
+                    if (i < line.Atoms.Count - 1)
+                        page.Stream.AddLine(x, top, x + atom.Width + atom.WsWidth, top);
+                    else
+                        page.Stream.AddLine(x, top, x + atom.Width, top);
+                }
+                x = x + atom.Width + atom.WsWidth;
             }
         }
 
