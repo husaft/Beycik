@@ -26,11 +26,11 @@ namespace Beycik.PDF.Core
             Options = options;
         }
 
-        public (int len, byte[] mem) ExportToArray()
+        public byte[] ExportToArray()
         {
             using var stream = new MemoryStream();
-            var len = ExportToStream(stream);
-            return (len, stream.ToArray());
+            ExportToStream(stream);
+            return stream.ToArray();
         }
 
         public int ExportToFile(string filename)

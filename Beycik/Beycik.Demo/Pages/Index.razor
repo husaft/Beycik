@@ -52,14 +52,16 @@
 		<span class="notes">@_notes</span>
 	}
 </label>
-<textarea id="xml" name="xml" rows="20" cols="80" @bind="_xmlInput"></textarea>
 
+<textarea id="xmlArea" name="xml" rows="20" cols="80" @bind="_xmlInput"></textarea>
+
+<input id="myXmlFile" type="file" onchange="loadTxtInto('myXmlFile','xmlArea')" />
 <button class="btn btn-primary" @onclick="Convert">Convert!</button>
 
 @code {
 	private string _xmlInput = string.Empty;
-	private string _lastError = null;
-	private string _notes = null;
+	private string _lastError;
+	private string _notes;
 
 	private int GetXmlLength => _xmlInput?.Length ?? 0;
 
@@ -105,12 +107,12 @@
 
 			using var convertor = new Xml2Pdf(input);
 			var pdf = convertor.SaveToBytes(options, config);
-			_notes += $", to PDF => {pdf.len} bytes";
+			_notes += $", to PDF => {pdf.Length} bytes";
 
 			await JsRuntime.InvokeVoidAsync("downloadArray",
 				new
 				{
-					ByteArray = pdf.mem, FileName = destName,
+					ByteArray = pdf, FileName = destName,
 					ContentType = "application/pdf"
 				});
 		}

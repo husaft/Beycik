@@ -64,8 +64,8 @@ namespace Beycik.PDF
             return pdf.ExportToFile(pdfFile);
         }
 
-        public (int len, byte[] mem) SaveToBytes(PdfOptions options, 
-            IConfig cfg = null, IFontManager fm = null, IEncodingPatcher ec = null)
+        public byte[] SaveToBytes(PdfOptions options, IConfig cfg = null, 
+            IFontManager fm = null, IEncodingPatcher ec = null)
         {
             var pdf = SaveInMem(options, cfg, fm, ec);
             return pdf.ExportToArray();

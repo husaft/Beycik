@@ -2,7 +2,7 @@
 {
     public interface IExportable
     {
-        (int len, byte[] mem) ExportToArray();
+        byte[] ExportToArray();
 
         int ExportToFile(string filename);
     }

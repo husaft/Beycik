@@ -12,6 +12,18 @@
 </head>
 
 <script language="javascript">
+    function loadTxtInto(fileId, areaId) {
+	    var file = document.getElementById(fileId).files[0];
+	    var reader = new FileReader();
+	    reader.onload = function (e) {
+		    var area = document.getElementById(areaId);
+			area.value = e.target.result;
+			var event = new Event('change');
+			area.dispatchEvent(event);
+	    };
+	    reader.readAsText(file);
+    }
+
 	function downloadFromUrl(options) {
 		var elem = document.createElement('a');
 		elem.href = options.url;
