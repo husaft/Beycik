@@ -7,3 +7,6 @@ Generate various document formats
 ~$ ./prepare.sh
 ~$ ./build.sh
 ```
+
+## Demo
+https://husaft.github.io/Beycik
