@@ -1,0 +1,122 @@
+﻿@page "/"
+@using Beycik.Model
+@using Beycik.PDF.Config
+@using System.Text.RegularExpressions
+@using Beycik.PDF
+
+@inject IJSRuntime JsRuntime
+
+<PageTitle>Demo</PageTitle>
+
+<style>
+	textarea {
+		font-size: 1em;
+		letter-spacing: 1px;
+	}
+	textarea {
+		padding: 10px;
+		max-width: 100%;
+		line-height: 1.5;
+		border-radius: 5px;
+		border: 1px solid #ccc;
+		box-shadow: 1px 1px 1px #999;
+	}
+
+	label {
+		display: block;
+		margin-bottom: 10px;
+	}
+
+	.error {
+		font-size: 1.24em;
+		color: red; 
+		font-weight: bold
+	}
+
+	textarea, .notes {
+		font-family: monospace;
+	}
+</style>
+
+<h1>XML to PDF</h1>
+
+<label for="xml" role="status">
+	@if (_lastError != null)
+	{
+		<span class="error">ERROR: @_lastError</span>
+	}
+	else
+	{
+		<span>Current character count: @GetXmlLength</span>
+		<br />
+		<span class="notes">@_notes</span>
+	}
+</label>
+<textarea id="xml" name="xml" rows="20" cols="80" @bind="_xmlInput"></textarea>
+
+<button class="btn btn-primary" @onclick="Convert">Convert!</button>
+
+@code {
+	private string _xmlInput = string.Empty;
+	private string _lastError = null;
+	private string _notes = null;
+
+	private int GetXmlLength => _xmlInput?.Length ?? 0;
+
+	private async void Convert()
+	{
+		_lastError = null;
+		_notes = null;
+		var xml = _xmlInput?.Trim();
+		if (string.IsNullOrWhiteSpace(xml))
+		{
+			_lastError = "It is empty!";
+			return;
+		}
+		try
+		{
+			var input = XmlHelper.ReadString(xml);
+			if (input == null)
+			{
+				_lastError = "Unknown error!";
+				return;
+			}
+
+			var formId = input.FormInfo?.FormServer?.FormId;
+			var formVer = input.Version;
+			var formName = input.FormInfo?.FormServer?.FormName ?? string.Empty;
+			var formSource = input.FormInfo?.FormServer?.Href?.Host;
+			_notes = $"from = {formSource}, version = {formVer}, " +
+			         $"id = {formId}, name = '{formName}'";
+
+			var simple = Regex.Replace(formName
+				.Replace('-', ' '), @"\s+", " ");
+			var destName = $"{formId} {simple}.pdf"
+				.Replace(' ', '_');
+
+			var options = PdfOption.GetReadOnly();
+			var config = new PdfConfig
+			{
+				ProducerWeb = "https://github.com/husaft/Beycik",
+				ProducerName = "beycik2pdf",
+				CreatorName = "Beycik",
+				CreatorVersion = "1.0"
+			};
+
+			using var convertor = new Xml2Pdf(input);
+			var pdf = convertor.SaveToBytes(options, config);
+			_notes += $", to PDF => {pdf.len} bytes";
+
+			await JsRuntime.InvokeVoidAsync("downloadArray",
+				new
+				{
+					ByteArray = pdf.mem, FileName = destName,
+					ContentType = "application/pdf"
+				});
+		}
+		catch (Exception e)
+		{
+			_lastError = e.Message;
+		}
+	}
+}

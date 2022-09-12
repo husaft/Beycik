@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beycik.PDF", "Beycik.PDF\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beycik.PDF.Tests", "Beycik.PDF.Tests\Beycik.PDF.Tests.csproj", "{DC96AC5E-C594-4AFA-9320-B763161B3AC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beycik.Demo", "Beycik.Demo\Beycik.Demo.csproj", "{0DF8D221-FD73-4353-8E8C-65597FFD0890}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 		{DC96AC5E-C594-4AFA-9320-B763161B3AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC96AC5E-C594-4AFA-9320-B763161B3AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC96AC5E-C594-4AFA-9320-B763161B3AC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DF8D221-FD73-4353-8E8C-65597FFD0890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DF8D221-FD73-4353-8E8C-65597FFD0890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DF8D221-FD73-4353-8E8C-65597FFD0890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DF8D221-FD73-4353-8E8C-65597FFD0890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

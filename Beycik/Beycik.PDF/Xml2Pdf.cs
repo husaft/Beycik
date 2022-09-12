@@ -45,7 +45,7 @@ namespace Beycik.PDF
             return (width: pageWidth, height: pageHeight);
         }
 
-        public int Save(string pdfFile, PdfOptions options, IConfig cfg = null,
+        private IExportable SaveInMem(PdfOptions options, IConfig cfg = null,
             IFontManager fm = null, IEncodingPatcher enc = null)
         {
             var config = cfg ?? new PdfConfig();
@@ -54,9 +54,21 @@ namespace Beycik.PDF
             var fonts = fm ?? Graphics.FontManager;
             var defEnc = enc ?? new DefaultEncPatcher();
 
-            var pdf = Transform(fonts, defEnc, _doc, config, options, _metrics);
-            var size = pdf.ExportToFile(pdfFile);
-            return size;
+            return Transform(fonts, defEnc, _doc, config, options, _metrics);
+        }
+
+        public int Save(string pdfFile, PdfOptions options, IConfig cfg = null,
+            IFontManager fm = null, IEncodingPatcher enc = null)
+        {
+            var pdf = SaveInMem(options, cfg, fm, enc);
+            return pdf.ExportToFile(pdfFile);
+        }
+
+        public (int len, byte[] mem) SaveToBytes(PdfOptions options, 
+            IConfig cfg = null, IFontManager fm = null, IEncodingPatcher ec = null)
+        {
+            var pdf = SaveInMem(options, cfg, fm, ec);
+            return pdf.ExportToArray();
         }
 
         private static PdfDocument Transform(IFontManager fonts, IEncodingPatcher enc,

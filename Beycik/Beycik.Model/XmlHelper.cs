@@ -93,6 +93,18 @@ namespace Beycik.Model
             }
         }
 
+        public static XmlDoc ReadString(string input)
+        {
+            using var plain = new StringReader(input);
+            return Read(plain);
+        }
+
+        private static XmlDoc Read(TextReader input)
+        {
+            var doc = (XmlDoc)Serializer.Deserialize(input);
+            return doc;
+        }
+
         private static XmlDoc Read(Stream input)
         {
             var doc = (XmlDoc)Serializer.Deserialize(input);

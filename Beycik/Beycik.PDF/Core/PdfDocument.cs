@@ -5,7 +5,7 @@ using Beycik.PDF.Text;
 
 namespace Beycik.PDF.Core
 {
-    internal sealed class PdfDocument
+    internal sealed class PdfDocument : IExportable
     {
         public IConfig Config { get; }
         public PdfInfo Info { get; }
@@ -24,6 +24,13 @@ namespace Beycik.PDF.Core
             Fonts = new PdfFonts(Config);
             Images = new PdfImages(Config);
             Options = options;
+        }
+
+        public (int len, byte[] mem) ExportToArray()
+        {
+            using var stream = new MemoryStream();
+            var len = ExportToStream(stream);
+            return (len, stream.ToArray());
         }
 
         public int ExportToFile(string filename)
