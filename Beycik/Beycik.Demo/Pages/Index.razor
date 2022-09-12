@@ -92,7 +92,11 @@
 			         $"id = {formId}, name = '{formName}'";
 
 			var simple = Regex.Replace(formName
-				.Replace('-', ' '), @"\s+", " ");
+				.Replace('-', ' ')
+				.Replace('(', ' ')
+				.Replace(')', ' ')
+				.Trim(), 
+				@"\s+", " ");
 			var destName = $"{formId} {simple}.pdf"
 				.Replace(' ', '_');
 
