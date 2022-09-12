@@ -11,6 +11,8 @@ namespace Beycik.Demo
     {
         private static async Task Main(string[] args)
         {
+            await Patches.LoadForWeb();
+
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
