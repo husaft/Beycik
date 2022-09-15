@@ -15,6 +15,15 @@ namespace Beycik.PDF.Tests
         [Theory]
         [InlineData("2309")]
         [InlineData("2317")]
+        [InlineData("0360")]
+        [InlineData("0468")]
+        [InlineData("0888")]
+        [InlineData("1220", "0:0.1")]
+        [InlineData("1415")]
+        [InlineData("1529", "0:0.1")]
+        [InlineData("2313")]
+        [InlineData("2900")]
+        [InlineData("3108")]
         public void ShouldWriteV3FullR(string name, params string[] boPatch)
             => ShouldWrite(name, "full", "3", false, boPatch);
 
@@ -42,6 +51,16 @@ namespace Beycik.PDF.Tests
         [Theory]
         [InlineData("4529")]
         [InlineData("3252")]
+        [InlineData("0111")]
+        [InlineData("0634")]
+        [InlineData("0757")]
+        [InlineData("0796")]
+        [InlineData("2912")]
+        [InlineData("3251")]
+        [InlineData("3256")]
+        [InlineData("3259")]
+        [InlineData("3491")]
+        [InlineData("4378")]
         public void ShouldWriteV4FullR(string name, params string[] boPatch)
             => ShouldWrite(name, "full", "4", false, boPatch);
 
