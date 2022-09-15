@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,20 +30,14 @@ namespace Beycik.PDF.Tests
                 var match = delLines.Select((d, j) => (idx: j,
                         diff: GetDiff(d, d.Length == inserted.Length ? inserted : null).ToArray()))
                     .FirstOrDefault(d => (d.diff.Length == 1
-                                          && char.IsDigit(d.diff[0].before)
-                                          && char.IsDigit(d.diff[0].after)) ||
+                                          && IsDigit(d.diff[0])) ||
                                          (d.diff.Length == 2
-                                          && char.IsDigit(d.diff[0].before)
-                                          && char.IsDigit(d.diff[0].after)
-                                          && char.IsDigit(d.diff[1].before)
-                                          && char.IsDigit(d.diff[1].after)) ||
+                                          && IsDigit(d.diff[0])
+                                          && IsDigit(d.diff[1])) ||
                                          (d.diff.Length == 3
-                                          && char.IsDigit(d.diff[0].before)
-                                          && char.IsDigit(d.diff[0].after)
-                                          && char.IsDigit(d.diff[1].before)
-                                          && char.IsDigit(d.diff[1].after)
-                                          && char.IsDigit(d.diff[2].before)
-                                          && char.IsDigit(d.diff[2].after)));
+                                          && IsDigit(d.diff[0])
+                                          && IsDigit(d.diff[1])
+                                          && IsDigit(d.diff[2])));
                 if (match.diff == null)
                     continue;
                 var replace = delLines[match.idx];
@@ -57,6 +50,9 @@ namespace Beycik.PDF.Tests
                 return;
             File.WriteAllLines(dstFile, insLines, enc);
         }
+
+        private static bool IsDigit((int index, char before, char after) diff) 
+            => char.IsDigit(diff.before) && char.IsDigit(diff.after);
 
         private static IEnumerable<(int index, char before, char after)> GetDiff(string first, string second)
         {
