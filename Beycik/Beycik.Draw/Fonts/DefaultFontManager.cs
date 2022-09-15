@@ -15,7 +15,8 @@ namespace Beycik.Draw.Fonts
             _mapping = new Dictionary<string, string>
             {
                 { "Helvetica", "Arial" },
-                { "Courier", "Courier New" }
+                { "Courier", "Courier New" },
+                { "MetaCorr", "Arial" }
             };
             if (addSystemFonts) _collection.AddSystemFonts();
         }
